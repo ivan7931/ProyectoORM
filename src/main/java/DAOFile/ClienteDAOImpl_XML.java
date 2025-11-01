@@ -22,25 +22,23 @@ public class ClienteDAOImpl_XML implements ClienteDAO {
     private final File archivoXML = new File("Clientes.xml");
 
     public ClienteDAOImpl_XML() {
-        try{
-            ArrayList<Cliente> listaClientes = listarClientes();
-            if (!listaClientes.isEmpty()) {
-                int maxID = 0;
-                for (Cliente cliente : listaClientes) {
-                    if (cliente.getId() > maxID) {
-                        maxID = cliente.getId();
-                    }
-                }
-                Cliente.setGeneradorID(maxID);
-            }
-        } catch (IOException e) {
-            System.err.println("No se pudo inicializar los IDs");
-        }
+
     }
 
     @Override
     public void agregarCliente(Cliente c) throws IOException {
         ArrayList<Cliente> ListaClientes = listarClientes();
+        int nuevoID = 1;
+        if (!ListaClientes.isEmpty()) {
+            int maxID = 0;
+            for (Cliente cliente : ListaClientes) {
+                if (cliente.getId() > maxID) {
+                    maxID = cliente.getId();
+                }
+            }
+            nuevoID = maxID + 1;
+            c.setId(nuevoID);
+        }
         ListaClientes.add(c);
         guardarXML(ListaClientes);
     }

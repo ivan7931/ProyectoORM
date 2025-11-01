@@ -1,5 +1,6 @@
 package DAOFile;
 
+import Clases.Cliente;
 import Clases.Producto;
 import Clases.Proveedor;
 import Interfaces.ProductoDAO;
@@ -25,7 +26,13 @@ public class ProductoDAOImpl_XML implements ProductoDAO {
     private final File archivoXML = new File("Productos.xml");
 
     public ProductoDAOImpl_XML() throws IOException {
-        ArrayList<Producto> listaProductos = listar();
+
+    }
+
+    @Override
+    public void agregarProducto(Producto p) throws IOException {
+        ArrayList <Producto> listaProductos = listar();
+        int nuevoID;
         if (!listaProductos.isEmpty()) {
             int maxID = 0;
             for (Producto producto : listaProductos) {
@@ -33,14 +40,9 @@ public class ProductoDAOImpl_XML implements ProductoDAO {
                     maxID = producto.getIdProducto();
                 }
             }
-            Producto.setGeneradorID(maxID);
+            nuevoID = maxID + 1;
+            p.setIdProducto(nuevoID);
         }
-    }
-
-    @Override
-    public void agregarProducto(Producto p) throws IOException {
-        ArrayList <Producto> listaProductos;
-        listaProductos = listar();
         listaProductos.add(p);
         guardarXML(listaProductos);
     }

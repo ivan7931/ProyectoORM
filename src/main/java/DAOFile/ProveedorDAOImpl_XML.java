@@ -27,7 +27,13 @@ public class ProveedorDAOImpl_XML implements ProveedorDAO {
     private final File archivoXML = new File("Proveedores.xml");
 
     public ProveedorDAOImpl_XML() throws IOException {
+
+    }
+
+    @Override
+    public void agregarProveedor(Proveedor p) throws IOException {
         ArrayList<Proveedor> listaProveedores = listarProveedores();
+        int nuevoID;
         if (!listaProveedores.isEmpty()) {
             int maxID = 0;
             for (Proveedor proveedor : listaProveedores) {
@@ -35,13 +41,9 @@ public class ProveedorDAOImpl_XML implements ProveedorDAO {
                     maxID = proveedor.getIdProveedor();
                 }
             }
-            Proveedor.setGeneradorID(maxID);
+            nuevoID = maxID + 1;
+            p.setIdProveedor(nuevoID);
         }
-    }
-
-    @Override
-    public void agregarProveedor(Proveedor p) throws IOException {
-        ArrayList<Proveedor> listaProveedores = listarProveedores();
         listaProveedores.add(p);
         guardarXML(listaProveedores);
     }
@@ -86,7 +88,6 @@ public class ProveedorDAOImpl_XML implements ProveedorDAO {
             parser.parse(archivoXML,handler);
             listaProveedores = handler.getListaProveedores();
         } catch (Exception e) {
-            e.printStackTrace();
             throw new IOException("Error al leer el XML", e);
         }
         return listaProveedores;
@@ -114,7 +115,7 @@ public class ProveedorDAOImpl_XML implements ProveedorDAO {
         return null;
     }
 
-    public void guardarXML(ArrayList<Proveedor> ListaProveedores) throws IOException {
+    public void guardarXML(ArrayList<Proveedor> ListaProveedores){
         /*try(BufferedWriter bw = new BufferedWriter(new FileWriter(archivoXML))) {
             bw.write("<proveedores>\n");
             for (Proveedor p : ListaProveedores) {
@@ -156,9 +157,7 @@ public class ProveedorDAOImpl_XML implements ProveedorDAO {
             // crea el árbol para una transformación.
             DOMSource source = new DOMSource(documento);
             // Mostrar los resultados por consola y escribirlos en el archivo.
-            StreamResult console = new StreamResult(System.out);
             StreamResult file = new StreamResult(archivoXML);
-            transf.transform(source, console);
             transf.transform(source, file);
 
 

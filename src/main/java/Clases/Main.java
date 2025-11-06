@@ -1,6 +1,8 @@
 package Clases;
 
 import JSONFile.ClienteDAOImpl_JSON;
+import JSONFile.ProductoDAOImpl_JSON;
+import JSONFile.ProveedorDAOImpl_JSON;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,8 +25,36 @@ public class Main {
         Producto p14 = new Producto("Ratón ergonómico", 35.50, Producto.categorias.CATEGORIA4, 40);
         Producto p15 = new Producto("Pantalones", 29.90, Producto.categorias.CATEGORIA5, 60);
         Producto p16 = new Producto("Chaqueta", 79.99, Producto.categorias.CATEGORIA5, 20);
+        ProductoDAOImpl_JSON productoDAO = new ProductoDAOImpl_JSON();
+        productoDAO.agregarProducto(p1);
+        productoDAO.agregarProducto(p2);
+        productoDAO.agregarProducto(p3);
+        productoDAO.agregarProducto(p4);
+        productoDAO.agregarProducto(p5);
+        productoDAO.agregarProducto(p6);
+        productoDAO.agregarProducto(p7);
+        productoDAO.agregarProducto(p8);
+        productoDAO.agregarProducto(p9);
+        productoDAO.agregarProducto(p10);
+        productoDAO.agregarProducto(p11);
+        productoDAO.agregarProducto(p12);
+        productoDAO.agregarProducto(p13);
+        productoDAO.agregarProducto(p14);
+        productoDAO.agregarProducto(p15);
+        productoDAO.agregarProducto(p16);
+        System.out.println(productoDAO.calcularValorInventario());*/
+        /*productoDAO.eliminarProducto(6);
+        System.out.println(productoDAO.buscarPorId(4));
+        System.out.println(productoDAO.buscarPorId(6));
+        System.out.println(productoDAO.calcularValorInventario());*/
 
-        ArrayList<Producto> lista1 = new ArrayList<>();
+        //ArrayList<Producto> listaprod = new ArrayList<>();
+        //listaprod= productoDAO.listar();
+        /*listaprod = productoDAO.listarPorCategoria("categoria2");
+        for(Producto p : listaprod){
+            System.out.println(p);
+        }*/
+        /*ArrayList<Producto> lista1 = new ArrayList<>();
         ProductoDAOImpl_XML prodDAO = new ProductoDAOImpl_XML();*/
         /*prodDAO.agregarProducto(p1);
         prodDAO.agregarProducto(p2);
@@ -53,7 +83,7 @@ public class Main {
         for (Producto p : porCategoria) {
             System.out.println(p.toString());
         }*/
-        Cliente c1 = new Cliente("Ana", "Gómez");
+        /*Cliente c1 = new Cliente("Ana", "Gómez");
         Cliente c2 = new Cliente("Luis", "Pérez");
         Cliente c3 = new Cliente("María", "Rodríguez");
         Cliente c4 = new Cliente("Carlos", "Sánchez");
@@ -71,7 +101,7 @@ public class Main {
         listaJSON= clienteDAOImplJSON.listarClientes();
         clienteDAOImplJSON.eliminarCliente(5);
         listaJSON= clienteDAOImplJSON.listarClientes();
-        System.out.println(clienteDAOImplJSON.contarClientes());
+        System.out.println(clienteDAOImplJSON.contarClientes());*/
         /*clienteJSON.agregarCliente(c1);
         clienteJSON.agregarCliente(c2);
         clienteJSON.agregarCliente(c3);
@@ -84,10 +114,10 @@ public class Main {
         clienteJSON.agregarCliente(c10);
         clienteJSON.agregarCliente(c11);
         clienteJSON.agregarCliente(c12);*/
-        listaJSON= clienteDAOImplJSON.listarClientes();
+        /*listaJSON= clienteDAOImplJSON.listarClientes();
         for(Cliente c : listaJSON) {
             System.out.println(c);
-        }
+        }*/
         /*ClienteDAOImpl_XML clienteDAO = new ClienteDAOImpl_XML();
         ArrayList<Cliente> listaClientes = new ArrayList<>();
         clienteDAO.agregarCliente(c1);
@@ -107,14 +137,29 @@ public class Main {
         for(Cliente c : listaClientes) {
             System.out.println(c);
         }*/
-        /*Proveedor prov1 = new Proveedor("Juan Pérez", "Frutas y Verduras S.A.");
+        Proveedor prov1 = new Proveedor("Juan Pérez", "Frutas y Verduras S.A.");
         Proveedor prov2 = new Proveedor("Laura Gómez", "Electrónica Global");
         Proveedor prov3 = new Proveedor("Carlos Ramírez", "Muebles y Hogar S.L.");
         Proveedor prov4 = new Proveedor("Ana Torres", "Ropa y Moda S.A.");
         Proveedor prov5 = new Proveedor("Miguel Sánchez", "Tecnología Avanzada");
         Proveedor prov6 = new Proveedor("Lucía Fernández", "Alimentos Naturales");
         ArrayList<Proveedor> listaProveedor = new ArrayList<>();
-        ProveedorDAOImpl_XML proveedorDAO = new ProveedorDAOImpl_XML();
+        ProveedorDAOImpl_JSON proveedorJSON = new ProveedorDAOImpl_JSON();
+        proveedorJSON.agregarProveedor(prov1);
+        proveedorJSON.agregarProveedor(prov2);
+        proveedorJSON.agregarProveedor(prov3);
+        proveedorJSON.agregarProveedor(prov4);
+        proveedorJSON.agregarProveedor(prov5);
+        proveedorJSON.agregarProveedor(prov6);
+        /*proveedorJSON.eliminarProveedor(4);
+        System.out.println(proveedorJSON.contarProveedores());
+        System.out.println(proveedorJSON.buscarPorId(3));
+        System.out.println(proveedorJSON.buscarPorId(4));*/
+        listaProveedor= proveedorJSON.listarProveedores();
+        for(Proveedor p :  listaProveedor){
+            System.out.println(p);
+        }
+        /*ProveedorDAOImpl_XML proveedorDAO = new ProveedorDAOImpl_XML();
         proveedorDAO.agregarProveedor(prov1);
         proveedorDAO.agregarProveedor(prov2);
         proveedorDAO.agregarProveedor(prov3);

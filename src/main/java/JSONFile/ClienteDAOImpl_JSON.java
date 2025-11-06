@@ -111,6 +111,17 @@ public class ClienteDAOImpl_JSON implements ClienteDAO {
             }
         }
         return resultado;*/
-        return null;
+        ArrayList<Cliente> listaTemp = new ArrayList<>();
+        ArrayList<Cliente> ListaClientesNombre = new ArrayList<>();
+        if(archivoJSON.length()>0) {
+            listaTemp = listarClientes();
+        }
+        for(int i =0;i<listaTemp.size() ;i++){
+            if(listaTemp.get(i).getNombre().equalsIgnoreCase(nombre)){
+                ListaClientesNombre.add(listaTemp.get(i));
+            }
+        }
+        return ListaClientesNombre;
+
     }
 }

@@ -91,13 +91,13 @@ public class ProductoDAOImpl_JSON implements ProductoDAO {
     @Override
     public double calcularValorInventario() throws IOException {
         ArrayList<Producto> listaEscrita = listar();
-        double valor = 0;
+        double inventario = 0;
 
         for (int i = 0; i < listaEscrita.size(); i++) {
-            valor += (listaEscrita.get(i).getPrecio() * listaEscrita.get(i).getCantidad());
+            inventario += (listaEscrita.get(i).getPrecio() * listaEscrita.get(i).getCantidad());
         }
 
-        return valor;
+        return inventario;
     }
 
     @Override

@@ -100,17 +100,6 @@ public class ClienteDAOImpl_JSON implements ClienteDAO {
 
     @Override
     public ArrayList<Cliente> buscarPorNombre(String nombre) throws IOException {
-        /*Cliente resultado = null;
-        ArrayList<Cliente> listaEscrita = listarClientes();
-        Iterator<Cliente> iterator = listaEscrita.iterator();
-        boolean encontrado = false;
-        while(iterator.hasNext() && !encontrado){
-            resultado = iterator.next();
-            if(resultado.getNombre().equals(nombre)){
-                encontrado = true;
-            }
-        }
-        return resultado;*/
         ArrayList<Cliente> listaTemp = new ArrayList<>();
         ArrayList<Cliente> ListaClientesNombre = new ArrayList<>();
         if(archivoJSON.length()>0) {

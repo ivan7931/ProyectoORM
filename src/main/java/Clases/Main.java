@@ -151,10 +151,10 @@ public class Main {
         proveedorJSON.agregarProveedor(prov4);
         proveedorJSON.agregarProveedor(prov5);
         proveedorJSON.agregarProveedor(prov6);
-        /*proveedorJSON.eliminarProveedor(4);
+        proveedorJSON.eliminarProveedor(4);
         System.out.println(proveedorJSON.contarProveedores());
         System.out.println(proveedorJSON.buscarPorId(3));
-        System.out.println(proveedorJSON.buscarPorId(4));*/
+        System.out.println(proveedorJSON.buscarPorId(4));
         listaProveedor= proveedorJSON.listarProveedores();
         for(Proveedor p :  listaProveedor){
             System.out.println(p);

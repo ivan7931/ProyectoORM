@@ -3,6 +3,9 @@ package DAOFile;
 import Clases.Cliente;
 import Clases.Producto;
 import Clases.Proveedor;
+import Excepciones.DataAccessException;
+import Excepciones.DataReadException;
+import Excepciones.DataWriteException;
 import Interfaces.ProductoDAO;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
@@ -11,9 +14,7 @@ import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.*;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.BufferedWriter;
@@ -25,54 +26,66 @@ import java.util.ArrayList;
 public class ProductoDAOImpl_XML implements ProductoDAO {
     private final File archivoXML = new File("Productos.xml");
 
-    public ProductoDAOImpl_XML() throws IOException {
+    public ProductoDAOImpl_XML() {
 
     }
 
     @Override
-    public void agregarProducto(Producto p) throws IOException {
-        ArrayList <Producto> listaProductos = listar();
-        int nuevoID;
-        if (!listaProductos.isEmpty()) {
-            int maxID = 0;
-            for (Producto producto : listaProductos) {
-                if (producto.getIdProducto() > maxID) {
-                    maxID = producto.getIdProducto();
+    public void agregarProducto(Producto p) throws DataAccessException {
+        try {
+            ArrayList<Producto> listaProductos = listar();
+            int nuevoID;
+            if (!listaProductos.isEmpty()) {
+                int maxID = 0;
+                for (Producto producto : listaProductos) {
+                    if (producto.getIdProducto() > maxID) {
+                        maxID = producto.getIdProducto();
+                    }
+                }
+                nuevoID = maxID + 1;
+                p.setIdProducto(nuevoID);
+            }
+            listaProductos.add(p);
+            guardarXML(listaProductos);
+        } catch (Exception e) {
+            throw new DataWriteException("Error al agregar el producto", e);
+        }
+    }
+
+    @Override
+    public void eliminarProducto(int id) throws DataAccessException {
+        try {
+            ArrayList<Producto> listaProductos = listar();
+            for (int i = 0; i < listaProductos.size(); i++) {
+                if (listaProductos.get(i).getIdProducto() == id) {
+                    listaProductos.remove(i);
+                    break;
                 }
             }
-            nuevoID = maxID + 1;
-            p.setIdProducto(nuevoID);
+            guardarXML(listaProductos);
+        } catch (Exception e) {
+            throw new DataWriteException("Error al eliminar el producto con ID" + id,e);
         }
-        listaProductos.add(p);
-        guardarXML(listaProductos);
     }
 
     @Override
-    public void eliminarProducto(int id) throws IOException {
-        ArrayList <Producto> listaProductos = listar();
-        for (int i = 0; i < listaProductos.size(); i++) {
-            if (listaProductos.get(i).getIdProducto() == id) {
-                listaProductos.remove(i);
-                break;
+    public void actualizarProducto(Producto p) throws DataAccessException {
+        try {
+            ArrayList<Producto> listaProductos = listar();
+            for (int i = 0; i < listaProductos.size(); i++) {
+                if (listaProductos.get(i).getIdProducto() == p.getIdProducto()) {
+                    listaProductos.set(i, p);
+                    break;
+                }
             }
+            guardarXML(listaProductos);
+        } catch (Exception e) {
+            throw new DataWriteException("Error al actualizar el producto con ID" + p.getIdProducto(), e);
         }
-        guardarXML(listaProductos);
     }
 
     @Override
-    public void actualizarProducto(Producto p) throws IOException {
-        ArrayList <Producto> listaProductos = listar();
-        for (int i = 0; i < listaProductos.size(); i++) {
-            if (listaProductos.get(i).getIdProducto() == p.getIdProducto()) {
-                listaProductos.set(i, p);
-                break;
-            }
-        }
-        guardarXML(listaProductos);
-    }
-
-    @Override
-    public ArrayList<Producto> listar() throws IOException {
+    public ArrayList<Producto> listar() throws DataAccessException {
         ArrayList<Producto> listaProductos = new ArrayList<>();
         if (!archivoXML.exists()||archivoXML.length() == 0) {
             return listaProductos;
@@ -87,14 +100,13 @@ public class ProductoDAOImpl_XML implements ProductoDAO {
             listaProductos = handler.getProductos();
 
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new IOException("Error al leer el XML",e);
+            throw new DataReadException("Error al leer el XML de productos",e);
         }
         return listaProductos;
     }
 
     @Override
-    public Producto buscarPorId(int id) throws IOException {
+    public Producto buscarPorId(int id) throws DataAccessException {
         ArrayList<Producto> listaProductos = listar();
         for( Producto producto : listaProductos ) {
             if (producto.getIdProducto() == id) {
@@ -105,7 +117,7 @@ public class ProductoDAOImpl_XML implements ProductoDAO {
     }
 
     @Override
-    public double calcularValorInventario() throws IOException {
+    public double calcularValorInventario() throws DataAccessException {
         ArrayList<Producto> listaProductos = listar();
         double ValorInventario = 0;
         for( Producto producto : listaProductos ) {
@@ -115,7 +127,7 @@ public class ProductoDAOImpl_XML implements ProductoDAO {
     }
 
     @Override
-    public ArrayList<Producto> listarPorCategoria(String categoria) throws IOException {
+    public ArrayList<Producto> listarPorCategoria(String categoria) throws DataAccessException {
         ArrayList<Producto> listaProductos = listar();
         ArrayList<Producto> productosPorCategoria = new ArrayList<>();
         for( Producto producto : listaProductos ) {
@@ -126,7 +138,7 @@ public class ProductoDAOImpl_XML implements ProductoDAO {
         return productosPorCategoria;
     }
 
-    public void guardarXML(ArrayList<Producto> ListaProductos) throws IOException {
+    public void guardarXML(ArrayList<Producto> ListaProductos) throws DataAccessException {
         /*try(BufferedWriter bw = new BufferedWriter(new FileWriter(archivoXML))) {
             bw.write("<productos>\n");
             for (Producto p : ListaProductos) {
@@ -148,7 +160,7 @@ public class ProductoDAOImpl_XML implements ProductoDAO {
             DOMImplementation implementation = builder.getDOMImplementation();
             //creamos el documento en memoria
             // Creamos el documento
-            //la siguiente linea crea el elemento raiz --> <prodcutos>...van los atributos de diferentes productos...</productos>
+            //la siguiente linea crea el elemento raiz --> <productos>...van los atributos de diferentes productos...</productos>
             Document documento = implementation.createDocument(null, "productos", null);
             // establecemos la version de XML
             documento.setXmlVersion("1.0");
@@ -176,8 +188,12 @@ public class ProductoDAOImpl_XML implements ProductoDAO {
             transf.transform(source, file);
 
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (ParserConfigurationException e) {
+            throw new DataWriteException("Error al configurar el parser de XML", e);
+        } catch (TransformerException e) {
+            throw new DataWriteException("Error al transformar o guardar el XML", e);
+        } catch (Exception e){
+            throw new DataWriteException("Error inesperado al guardar el XML", e);
         }
 
     }
@@ -196,6 +212,5 @@ public class ProductoDAOImpl_XML implements ProductoDAO {
         Text texto = documento.createTextNode(valor);
         elemento.appendChild(texto);
         return elemento;
-
     }
 }

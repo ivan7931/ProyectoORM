@@ -3,6 +3,9 @@ package DAOFile;
 import Clases.Cliente;
 import Clases.Producto;
 import Clases.Proveedor;
+import Excepciones.DataAccessException;
+import Excepciones.DataReadException;
+import Excepciones.DataWriteException;
 import Interfaces.ProductoDAO;
 import Interfaces.ProveedorDAO;
 import org.w3c.dom.DOMImplementation;
@@ -11,9 +14,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
 
+import javax.xml.crypto.Data;
 import javax.xml.parsers.*;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -26,54 +31,66 @@ import java.util.ArrayList;
 public class ProveedorDAOImpl_XML implements ProveedorDAO {
     private final File archivoXML = new File("Proveedores.xml");
 
-    public ProveedorDAOImpl_XML() throws IOException {
+    public ProveedorDAOImpl_XML(){
 
     }
 
     @Override
-    public void agregarProveedor(Proveedor p) throws IOException {
-        ArrayList<Proveedor> listaProveedores = listarProveedores();
-        int nuevoID;
-        if (!listaProveedores.isEmpty()) {
-            int maxID = 0;
+    public void agregarProveedor(Proveedor p) throws DataAccessException {
+        try {
+            ArrayList<Proveedor> listaProveedores = listarProveedores();
+            int nuevoID;
+            if (!listaProveedores.isEmpty()) {
+                int maxID = 0;
+                for (Proveedor proveedor : listaProveedores) {
+                    if (proveedor.getIdProveedor() > maxID) {
+                        maxID = proveedor.getIdProveedor();
+                    }
+                }
+                nuevoID = maxID + 1;
+                p.setIdProveedor(nuevoID);
+            }
+            listaProveedores.add(p);
+            guardarXML(listaProveedores);
+        } catch (Exception e) {
+            throw new DataWriteException("Error al agregar el proveedor",e);
+        }
+    }
+
+    @Override
+    public void eliminarProveedor(int id) throws DataAccessException {
+        try {
+            ArrayList<Proveedor> listaProveedores = listarProveedores();
             for (Proveedor proveedor : listaProveedores) {
-                if (proveedor.getIdProveedor() > maxID) {
-                    maxID = proveedor.getIdProveedor();
+                if (proveedor.getIdProveedor() == id) {
+                    listaProveedores.remove(proveedor);
+                    break;
                 }
             }
-            nuevoID = maxID + 1;
-            p.setIdProveedor(nuevoID);
+            guardarXML(listaProveedores);
+        } catch (Exception e) {
+            throw new DataWriteException("Error al eliminar el proveedor con ID" + id, e);
         }
-        listaProveedores.add(p);
-        guardarXML(listaProveedores);
     }
 
     @Override
-    public void eliminarProveedor(int id) throws IOException {
-        ArrayList<Proveedor> listaProveedores = listarProveedores();
-        for (Proveedor proveedor : listaProveedores) {
-            if (proveedor.getIdProveedor() == id) {
-                listaProveedores.remove(proveedor);
-                break;
+    public void actualizarProveedor(Proveedor p) throws DataAccessException {
+        try {
+            ArrayList<Proveedor> listaProveedores = listarProveedores();
+            for (int i = 0; i < listaProveedores.size(); i++) {
+                if (listaProveedores.get(i).getIdProveedor() == p.getIdProveedor()) {
+                    listaProveedores.set(i, p);
+                    break;
+                }
             }
+            guardarXML(listaProveedores);
+        } catch (Exception e) {
+            throw new DataWriteException("Error al actualizar el proveedos con ID" + p.getIdProveedor(), e);
         }
-        guardarXML(listaProveedores);
     }
 
     @Override
-    public void actualizarProveedor(Proveedor p) throws IOException {
-        ArrayList<Proveedor> listaProveedores = listarProveedores();
-        for (int i = 0; i < listaProveedores.size(); i++) {
-            if (listaProveedores.get(i).getIdProveedor() == p.getIdProveedor()) {
-                listaProveedores.set(i, p);
-                break;
-            }
-        }
-        guardarXML(listaProveedores);
-    }
-
-    @Override
-    public ArrayList<Proveedor> listarProveedores() throws IOException {
+    public ArrayList<Proveedor> listarProveedores() throws DataAccessException {
         ArrayList<Proveedor> listaProveedores = new ArrayList<>();
         if (!archivoXML.exists() || archivoXML.length() == 0) {
             return listaProveedores;
@@ -88,13 +105,13 @@ public class ProveedorDAOImpl_XML implements ProveedorDAO {
             parser.parse(archivoXML,handler);
             listaProveedores = handler.getListaProveedores();
         } catch (Exception e) {
-            throw new IOException("Error al leer el XML", e);
+            throw new DataReadException("Error al leer el XML de proveedores", e);
         }
         return listaProveedores;
     }
 
     @Override
-    public Proveedor buscarPorId(int id) throws IOException {
+    public Proveedor buscarPorId(int id) throws DataAccessException {
         ArrayList<Proveedor> listaProveedores = new ArrayList<>();
         listaProveedores = listarProveedores();
         for (Proveedor proveedor : listaProveedores) {
@@ -106,12 +123,12 @@ public class ProveedorDAOImpl_XML implements ProveedorDAO {
     }
 
     @Override
-    public int contarProveedores() throws IOException {
+    public int contarProveedores() throws DataAccessException {
         return listarProveedores().size();
     }
 
     @Override
-    public ArrayList<Producto> productosSuministrados(int idProveedor) throws IOException {
+    public ArrayList<Producto> productosSuministrados(int idProveedor) throws DataAccessException{
         ProductoDAO productoDAO = new ProductoDAOImpl_XML(); // o JSON según modo
         ArrayList<Producto> todos = productoDAO.listar();
         ArrayList<Producto> resultado = new ArrayList<>();
@@ -125,7 +142,7 @@ public class ProveedorDAOImpl_XML implements ProveedorDAO {
         return resultado;
     }
 
-    public void guardarXML(ArrayList<Proveedor> ListaProveedores){
+    public void guardarXML(ArrayList<Proveedor> ListaProveedores) throws DataAccessException {
         /*try(BufferedWriter bw = new BufferedWriter(new FileWriter(archivoXML))) {
             bw.write("<proveedores>\n");
             for (Proveedor p : ListaProveedores) {
@@ -171,8 +188,12 @@ public class ProveedorDAOImpl_XML implements ProveedorDAO {
             transf.transform(source, file);
 
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (ParserConfigurationException e) {
+            throw new DataWriteException("Error al configurar el parser de XML", e);
+        } catch (TransformerException e) {
+            throw new DataWriteException("Error al transformar o guardar el XML", e);
+        } catch (Exception e){
+            throw new DataWriteException("Error inesperado al guardar el XML", e);
         }
 
     }

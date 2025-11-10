@@ -1,6 +1,9 @@
 package JSONFile;
 
 import Clases.Producto;
+import Excepciones.DataAccessException;
+import Excepciones.DataReadException;
+import Excepciones.DataWriteException;
 import Interfaces.ProductoDAO;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
@@ -14,55 +17,75 @@ import java.util.Iterator;
 
 public class ProductoDAOImpl_JSON implements ProductoDAO {
     private final File archivoJSON = new File("Productos.json");
-    @Override
-    public void agregarProducto(Producto p) throws IOException {
-        ArrayList<Producto> listaEscrita = listar();
-        listaEscrita.add(p);
-        Jsonb jsonb = JsonbBuilder.create();
-        // Serializar la lista de jugadores y escribirla en un archivo
-        try (FileWriter fileWriter = new FileWriter(archivoJSON)) {
-            jsonb.toJson(listaEscrita, fileWriter);
-        }
+    public ProductoDAOImpl_JSON() {
 
     }
-
     @Override
-    public void eliminarProducto(int id) throws IOException {
-        ArrayList<Producto> listaEscrita = listar();
-        Producto aux = null;
-        Iterator<Producto> iterator = listaEscrita.iterator();
-        boolean eliminado = false;
-        while (iterator.hasNext() && !eliminado) {
-            aux = iterator.next();
-            if (aux.getIdProducto()==id) {
-                iterator.remove();
-                eliminado = true;
+    public void agregarProducto(Producto p) throws DataAccessException {
+        try {
+            ArrayList<Producto> listaEscrita = listar();
+            listaEscrita.add(p);
+            Jsonb jsonb = JsonbBuilder.create();
+            // Serializar la lista de jugadores y escribirla en un archivo
+            try (FileWriter fileWriter = new FileWriter(archivoJSON)) {
+                jsonb.toJson(listaEscrita, fileWriter);
             }
-        }
-        Jsonb jsonb = JsonbBuilder.create();
-        try (FileWriter fileWriter = new FileWriter(archivoJSON)) {
-            jsonb.toJson(listaEscrita, fileWriter);
+        } catch (IOException e) {
+            throw new DataWriteException("Error al guardar el producto en el archivo JSON", e);
+        } catch (DataAccessException e) {
+            throw new DataAccessException("Error al acceder a los datos de productos", e);
         }
     }
 
     @Override
-    public void actualizarProducto(Producto p) throws IOException {
-        ArrayList<Producto> listaEscrita = listar();
-        boolean actualizado = false;
-        for(int i =0;i<listaEscrita.size() && !actualizado;i++){
-            if(listaEscrita.get(i).getIdProducto()==p.getIdProducto()){
-                listaEscrita.set(i, p);
-                actualizado = true;
+    public void eliminarProducto(int id) throws DataAccessException {
+        try {
+            ArrayList<Producto> listaEscrita = listar();
+            Producto aux = null;
+            Iterator<Producto> iterator = listaEscrita.iterator();
+            boolean eliminado = false;
+            while (iterator.hasNext() && !eliminado) {
+                aux = iterator.next();
+                if (aux.getIdProducto() == id) {
+                    iterator.remove();
+                    eliminado = true;
+                }
             }
-        }
-        Jsonb jsonb = JsonbBuilder.create();
-        try (FileWriter fileWriter = new FileWriter(archivoJSON)) {
-            jsonb.toJson(listaEscrita, fileWriter);
+            Jsonb jsonb = JsonbBuilder.create();
+            try (FileWriter fileWriter = new FileWriter(archivoJSON)) {
+                jsonb.toJson(listaEscrita, fileWriter);
+            }
+        } catch (IOException e) {
+            throw new DataWriteException("Error al eliminar el producto en el archivo JSON", e);
+        } catch (DataReadException e) {
+            throw new DataAccessException("Error al acceder a los datos de productos", e);
         }
     }
 
     @Override
-    public ArrayList<Producto> listar() throws IOException {
+    public void actualizarProducto(Producto p) throws DataAccessException {
+        try {
+            ArrayList<Producto> listaEscrita = listar();
+            boolean actualizado = false;
+            for (int i = 0; i < listaEscrita.size() && !actualizado; i++) {
+                if (listaEscrita.get(i).getIdProducto() == p.getIdProducto()) {
+                    listaEscrita.set(i, p);
+                    actualizado = true;
+                }
+            }
+            Jsonb jsonb = JsonbBuilder.create();
+            try (FileWriter fileWriter = new FileWriter(archivoJSON)) {
+                jsonb.toJson(listaEscrita, fileWriter);
+            }
+        } catch (IOException e) {
+            throw new DataWriteException("Error al actualizar el cliente en el archivo JSON", e);
+        } catch (DataReadException e) {
+            throw new DataAccessException("Error al acceder a los datos de clientes", e);
+        }
+    }
+
+    @Override
+    public ArrayList<Producto> listar() throws DataReadException {
         ArrayList<Producto> resultado = new ArrayList<>();
         // Crear una instancia de Jsonb
         Jsonb jsonb = JsonbBuilder.create();
@@ -71,44 +94,58 @@ public class ProductoDAOImpl_JSON implements ProductoDAO {
             try (FileReader fileReader = new FileReader(archivoJSON)) {
                 resultado = jsonb.fromJson(fileReader, new ArrayList<Producto>() {
                 }.getClass().getGenericSuperclass());
+            } catch (Exception e) {
+                throw new DataReadException("Error al leer el archivo JSON de productos", e);
             }
         }
         return resultado;
     }
 
     @Override
-    public Producto buscarPorId(int id) throws IOException {
-        Producto resultado = null;
-        ArrayList<Producto> listaEscrita = listar();
-        for(int i =0;i<listaEscrita.size();i++){
-            if(listaEscrita.get(i).getIdProducto()==id){
-                resultado = listaEscrita.get(i);
+    public Producto buscarPorId(int id) throws DataAccessException {
+        try {
+            Producto resultado = null;
+            ArrayList<Producto> listaEscrita = listar();
+            for (int i = 0; i < listaEscrita.size(); i++) {
+                if (listaEscrita.get(i).getIdProducto() == id) {
+                    resultado = listaEscrita.get(i);
+                }
             }
+            return resultado;
+        } catch (DataReadException e) {
+            throw new DataAccessException("Error al buscar el producto con ID" + id, e);
         }
-        return resultado;
     }
 
     @Override
-    public double calcularValorInventario() throws IOException {
-        ArrayList<Producto> listaEscrita = listar();
-        double inventario = 0;
+    public double calcularValorInventario() throws DataAccessException {
+        try {
+            ArrayList<Producto> listaEscrita = listar();
+            double inventario = 0;
 
-        for (int i = 0; i < listaEscrita.size(); i++) {
-            inventario += (listaEscrita.get(i).getPrecio() * listaEscrita.get(i).getCantidad());
+            for (int i = 0; i < listaEscrita.size(); i++) {
+                inventario += (listaEscrita.get(i).getPrecio() * listaEscrita.get(i).getCantidad());
+            }
+
+            return inventario;
+        } catch (DataReadException e) {
+            throw new DataAccessException("Error al calcular el valor de inventario", e);
         }
-
-        return inventario;
     }
 
     @Override
-    public ArrayList<Producto> listarPorCategoria(String categoria) throws IOException {
-        ArrayList<Producto> listaEscrita = listar();
-        ArrayList<Producto> resultado = new ArrayList<>();
-        for (int i = 0; i < listaEscrita.size(); i++) {
-            if(listaEscrita.get(i).getCategoria().name().equalsIgnoreCase(categoria)){
-                resultado.add(listaEscrita.get(i));
+    public ArrayList<Producto> listarPorCategoria(String categoria) throws DataAccessException {
+        try {
+            ArrayList<Producto> listaEscrita = listar();
+            ArrayList<Producto> resultado = new ArrayList<>();
+            for (int i = 0; i < listaEscrita.size(); i++) {
+                if (listaEscrita.get(i).getCategoria().name().equalsIgnoreCase(categoria)) {
+                    resultado.add(listaEscrita.get(i));
+                }
             }
+            return resultado;
+        } catch (DataReadException e) {
+            throw new DataAccessException("Error al listar por categoria los productos",e);
         }
-        return resultado;
     }
 }

@@ -4,6 +4,7 @@ import Clases.Cliente;
 import Clases.Producto;
 import Clases.Proveedor;
 import DAOFile.*;
+import Excepciones.DataAccessException;
 import Interfaces.ClienteDAO;
 import Interfaces.ProductoDAO;
 import Interfaces.ProveedorDAO;
@@ -67,13 +68,18 @@ public class Menu {
                         System.out.println("Saliendo..."); break;
                     default: System.out.println("Error, elija una opcion correcta"); break;
                 }
-            } catch (InputMismatchException | IOException ex) {
-                System.err.println("Error: " +  ex.getMessage());
+            } catch (InputMismatchException e) {
+                System.err.println("Entrada invalida, introduce un numero estero.");
+                in.nextLine();
+            } catch (DataAccessException e){
+                System.err.println("Error: " +  e.getMessage());
+            } catch (Exception e) {
+                System.err.println("Error inesperado: " + e.getMessage());
             }
         } while (opcion != 4);
     }
 
-    public static void menuClientes(ClienteDAO clienteDAO) throws IOException {
+    public static void menuClientes(ClienteDAO clienteDAO) throws DataAccessException {
         int opcion = 0;
         do{
             System.out.println("\n===== MENÚ CLIENTES =====");
@@ -128,7 +134,7 @@ public class Menu {
             }
         } while (opcion != 6);
     }
-    public static void menuProductos(ProductoDAO productoDAO) throws IOException {
+    public static void menuProductos(ProductoDAO productoDAO) throws DataAccessException {
         int opcion = 0;
         do{
             System.out.println("\n===== MENÚ PRODUCTOS =====");
@@ -155,7 +161,7 @@ public class Menu {
                                 new Producto(nombre, precio, Producto.categorias.valueOf(cat), cantidad, idProveedor)
                         );
                         System.out.println("Producto agregado correctamente");
-                    } catch (IllegalArgumentException e) {
+                    } catch (IllegalArgumentException | DataAccessException e) {
                         System.out.println("Error: categoría no válida");
                     }
                     break;
@@ -179,7 +185,7 @@ public class Menu {
         } while (opcion != 5);
 
     }
-    public static void menuProveedores(ProveedorDAO proveedorDAO) throws IOException {
+    public static void menuProveedores(ProveedorDAO proveedorDAO) throws DataAccessException {
         int opcion = 0;
         do{
             System.out.println("\n===== MENÚ PROVEEDORES =====");

@@ -1,9 +1,11 @@
 package JSONFile;
 
 import Clases.Cliente;
+import Excepciones.*;
 import Interfaces.ClienteDAO;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
+import jakarta.json.bind.JsonbException;
 
 import java.io.File;
 import java.io.FileReader;
@@ -17,53 +19,71 @@ public class ClienteDAOImpl_JSON implements ClienteDAO {
     public ClienteDAOImpl_JSON() {
     }
     @Override
-    public void agregarCliente(Cliente c) throws IOException {
-        ArrayList<Cliente> listaEscrita = listarClientes();
-        listaEscrita.add(c);
-        Jsonb jsonb = JsonbBuilder.create();
-        // Serializar la lista de jugadores y escribirla en un archivo
-        try (FileWriter fileWriter = new FileWriter(archivoJSON)) {
-            jsonb.toJson(listaEscrita, fileWriter);
-        }
-    }
-
-    @Override
-    public void eliminarCliente(int id) throws IOException {
-        ArrayList<Cliente> listaEscrita = listarClientes();
-        Cliente aux = null;
-        Iterator<Cliente> iterator = listaEscrita.iterator();
-        boolean eliminado = false;
-        while (iterator.hasNext() && !eliminado) {
-            aux = iterator.next();
-            if (aux.getId()==id) {
-                iterator.remove();
-                eliminado = true;
+    public void agregarCliente(Cliente c) throws DataAccessException {
+        try {
+            ArrayList<Cliente> listaEscrita = listarClientes();
+            listaEscrita.add(c);
+            Jsonb jsonb = JsonbBuilder.create();
+            // Serializar la lista de jugadores y escribirla en un archivo
+            try (FileWriter fileWriter = new FileWriter(archivoJSON)) {
+                jsonb.toJson(listaEscrita, fileWriter);
             }
-        }
-        Jsonb jsonb = JsonbBuilder.create();
-        try (FileWriter fileWriter = new FileWriter(archivoJSON)) {
-            jsonb.toJson(listaEscrita, fileWriter);
+        } catch (IOException e) {
+            throw new DataWriteException("Error al guardar el cliente en el archivo JSON", e);
+        } catch (DataAccessException e) {
+            throw new DataAccessException("Error al acceder a los datos de clientes", e);
         }
     }
 
     @Override
-    public void actualizarCliente(Cliente c) throws IOException {
-        ArrayList<Cliente> listaEscrita = listarClientes();
-        boolean actualizado = false;
-        for(int i =0;i<listaEscrita.size() && !actualizado;i++){
-            if(listaEscrita.get(i).getId()==c.getId()){
-                listaEscrita.set(i, c);
-                actualizado = true;
+    public void eliminarCliente(int id) throws DataAccessException {
+        try {
+            ArrayList<Cliente> listaEscrita = listarClientes();
+            Cliente aux = null;
+            Iterator<Cliente> iterator = listaEscrita.iterator();
+            boolean eliminado = false;
+            while (iterator.hasNext() && !eliminado) {
+                aux = iterator.next();
+                if (aux.getId() == id) {
+                    iterator.remove();
+                    eliminado = true;
+                }
             }
-        }
-        Jsonb jsonb = JsonbBuilder.create();
-        try (FileWriter fileWriter = new FileWriter(archivoJSON)) {
-            jsonb.toJson(listaEscrita, fileWriter);
+            Jsonb jsonb = JsonbBuilder.create();
+            try (FileWriter fileWriter = new FileWriter(archivoJSON)) {
+                jsonb.toJson(listaEscrita, fileWriter);
+            }
+        } catch (IOException e) {
+            throw new DataWriteException("Error al eliminar el cliente en el archivo JSON", e);
+        } catch (DataReadException e) {
+            throw new DataAccessException("Error al acceder a los datos de clientes", e);
         }
     }
 
     @Override
-    public ArrayList<Cliente> listarClientes() throws IOException {
+    public void actualizarCliente(Cliente c) throws DataAccessException {
+        try {
+            ArrayList<Cliente> listaEscrita = listarClientes();
+            boolean actualizado = false;
+            for (int i = 0; i < listaEscrita.size() && !actualizado; i++) {
+                if (listaEscrita.get(i).getId() == c.getId()) {
+                    listaEscrita.set(i, c);
+                    actualizado = true;
+                }
+            }
+            Jsonb jsonb = JsonbBuilder.create();
+            try (FileWriter fileWriter = new FileWriter(archivoJSON)) {
+                jsonb.toJson(listaEscrita, fileWriter);
+            }
+        } catch (IOException e) {
+            throw new DataWriteException("Error al actualizar el cliente en el archivo JSON", e);
+        } catch (DataReadException e) {
+            throw new DataAccessException("Error al acceder a los datos de clientes", e);
+        }
+    }
+
+    @Override
+    public ArrayList<Cliente> listarClientes() throws DataReadException {
         ArrayList<Cliente> resultado = new ArrayList<>();
         // Crear una instancia de Jsonb
         Jsonb jsonb = JsonbBuilder.create();
@@ -72,45 +92,58 @@ public class ClienteDAOImpl_JSON implements ClienteDAO {
             try (FileReader fileReader = new FileReader(archivoJSON)) {
                 resultado = jsonb.fromJson(fileReader, new ArrayList<Cliente>() {
                 }.getClass().getGenericSuperclass());
+            } catch (Exception e){
+                throw new DataReadException("Error al leer el archivo JSON de clientes",e);
             }
         }
         return resultado;
     }
 
     @Override
-    public Cliente buscarPorId(int id) throws IOException {
-        Cliente resultado = null;
-        ArrayList<Cliente> listaEscrita = listarClientes();
-        Iterator<Cliente> iterator = listaEscrita.iterator();
-        boolean encontrado = false;
-        while(iterator.hasNext() && !encontrado){
-            resultado = iterator.next();
-            if(resultado.getId()==id){
-                encontrado = true;
+    public Cliente buscarPorId(int id) throws DataAccessException {
+        try {
+            Cliente resultado = null;
+            ArrayList<Cliente> listaEscrita = listarClientes();
+            Iterator<Cliente> iterator = listaEscrita.iterator();
+            boolean encontrado = false;
+            while (iterator.hasNext() && !encontrado) {
+                resultado = iterator.next();
+                if (resultado.getId() == id) {
+                    encontrado = true;
+                }
             }
+            return resultado;
+        } catch (DataReadException e) {
+            throw new DataAccessException("Error al buscar el cliente con ID" + id,e);
         }
-        return resultado;
     }
 
     @Override
-    public int contarClientes() throws IOException {
-        ArrayList<Cliente> listaEscrita = listarClientes();
-        return listaEscrita.size();
+    public int contarClientes() throws DataAccessException {
+        try {
+            ArrayList<Cliente> listaEscrita = listarClientes();
+            return listaEscrita.size();
+        } catch (DataReadException e) {
+            throw new DataAccessException("Error al contar los clientes",e);
+        }
     }
 
     @Override
-    public ArrayList<Cliente> buscarPorNombre(String nombre) throws IOException {
-        ArrayList<Cliente> listaTemp = new ArrayList<>();
-        ArrayList<Cliente> ListaClientesNombre = new ArrayList<>();
-        if(archivoJSON.length()>0) {
-            listaTemp = listarClientes();
-        }
-        for(int i =0;i<listaTemp.size() ;i++){
-            if(listaTemp.get(i).getNombre().equalsIgnoreCase(nombre)){
-                ListaClientesNombre.add(listaTemp.get(i));
+    public ArrayList<Cliente> buscarPorNombre(String nombre) throws DataAccessException {
+        try{
+            ArrayList<Cliente> listaTemp = new ArrayList<>();
+            ArrayList<Cliente> ListaClientesNombre = new ArrayList<>();
+            if(archivoJSON.length()>0) {
+                listaTemp = listarClientes();
             }
+            for(int i =0;i<listaTemp.size() ;i++){
+                if(listaTemp.get(i).getNombre().equalsIgnoreCase(nombre)){
+                    ListaClientesNombre.add(listaTemp.get(i));
+                }
+            }
+            return ListaClientesNombre;
+        } catch (DataReadException e) {
+            throw new DataAccessException("Error al buscar el cliente con nombre " + nombre,e);
         }
-        return ListaClientesNombre;
-
     }
 }

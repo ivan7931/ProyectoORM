@@ -1,25 +1,27 @@
 package Interfaces;
 
 import Clases.*;
+import Excepciones.DataAccessException;
+import Excepciones.DataWriteException;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 public interface ProductoDAO {
 
-    void agregarProducto(Producto p) throws IOException;
+    void agregarProducto(Producto p) throws DataAccessException;
 
-    void eliminarProducto(int id) throws IOException;
+    void eliminarProducto(int id) throws DataAccessException;
 
-    void actualizarProducto(Producto p) throws IOException;
+    void actualizarProducto(Producto p) throws DataAccessException;
 
-    ArrayList<Producto> listar() throws IOException;
+    ArrayList<Producto> listar() throws DataAccessException;
 
-    Producto buscarPorId(int id) throws IOException;
+    Producto buscarPorId(int id) throws DataAccessException;
 
-    double calcularValorInventario() throws IOException;
+    double calcularValorInventario() throws DataAccessException;
 
-    ArrayList<Producto> listarPorCategoria(String categoria) throws IOException;
+    ArrayList<Producto> listarPorCategoria(String categoria) throws DataAccessException;
 
 
 }

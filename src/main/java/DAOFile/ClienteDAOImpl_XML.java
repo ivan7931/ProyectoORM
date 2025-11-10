@@ -2,6 +2,9 @@ package DAOFile;
 
 import Clases.Cliente;
 import Clases.Producto;
+import Excepciones.DataAccessException;
+import Excepciones.DataReadException;
+import Excepciones.DataWriteException;
 import Interfaces.ClienteDAO;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
@@ -12,6 +15,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.*;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -26,49 +30,61 @@ public class ClienteDAOImpl_XML implements ClienteDAO {
     }
 
     @Override
-    public void agregarCliente(Cliente c) throws IOException {
-        ArrayList<Cliente> ListaClientes = listarClientes();
-        int nuevoID = 1;
-        if (!ListaClientes.isEmpty()) {
-            int maxID = 0;
-            for (Cliente cliente : ListaClientes) {
-                if (cliente.getId() > maxID) {
-                    maxID = cliente.getId();
+    public void agregarCliente(Cliente c) throws DataAccessException {
+        try {
+            ArrayList<Cliente> ListaClientes = listarClientes();
+            int nuevoID = 1;
+            if (!ListaClientes.isEmpty()) {
+                int maxID = 0;
+                for (Cliente cliente : ListaClientes) {
+                    if (cliente.getId() > maxID) {
+                        maxID = cliente.getId();
+                    }
+                }
+                nuevoID = maxID + 1;
+                c.setId(nuevoID);
+            }
+            ListaClientes.add(c);
+            guardarXML(ListaClientes);
+        } catch (Exception e) {
+            throw new DataWriteException("Error al agregar el cliente", e);
+        }
+    }
+
+    @Override
+    public void eliminarCliente(int id) throws DataAccessException {
+        try {
+            ArrayList<Cliente> ListaClientes = listarClientes();
+            for (int i = 0; i < ListaClientes.size(); i++) {
+                if (ListaClientes.get(i).getId() == id) {
+                    ListaClientes.remove(i);
+                    break;
                 }
             }
-            nuevoID = maxID + 1;
-            c.setId(nuevoID);
+            guardarXML(ListaClientes);
+        } catch (Exception e) {
+            throw new DataWriteException("Error al eliminar el cliente con ID" + id, e);
         }
-        ListaClientes.add(c);
-        guardarXML(ListaClientes);
     }
 
     @Override
-    public void eliminarCliente(int id) throws IOException {
-        ArrayList<Cliente> ListaClientes = listarClientes();
-        for (int i = 0; i < ListaClientes.size(); i++) {
-            if (ListaClientes.get(i).getId() == id) {
-                ListaClientes.remove(i);
-                break;
+    public void actualizarCliente(Cliente c) throws DataAccessException {
+        try {
+            ArrayList<Cliente> listaClientes = listarClientes();
+            for (int i = 0; i < listaClientes.size(); i++) {
+                if (listaClientes.get(i).getId() == c.getId()) {
+                    listaClientes.set(i, c);
+                    break;
+                }
             }
+            guardarXML(listaClientes);
+        } catch (Exception e) {
+            throw new DataWriteException("Error al actualizar el cliente con ID"+ c.getId(),e);
         }
-        guardarXML(ListaClientes);
     }
 
     @Override
-    public void actualizarCliente(Cliente c) throws IOException {
-        ArrayList<Cliente> listaClientes = listarClientes();
-        for (int i = 0; i < listaClientes.size(); i++) {
-            if (listaClientes.get(i).getId() == c.getId()) {
-                listaClientes.set(i, c);
-                break;
-            }
-        }
-        guardarXML(listaClientes);
-    }
-
-    @Override
-    public ArrayList<Cliente> listarClientes() throws IOException {
+    public ArrayList<Cliente> listarClientes() throws DataAccessException {
         ArrayList<Cliente> ListaClientes = new ArrayList<>();
         if (!archivoXML.exists() || archivoXML.length() == 0) {
             return ListaClientes;
@@ -83,18 +99,14 @@ public class ClienteDAOImpl_XML implements ClienteDAO {
             ListaClientes = handler.getClientes();
 
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new IOException("Error al leer el XML", e);
+            throw new DataReadException("Error al leer el XML de clientes", e);
         }
 
-        if (!ListaClientes.isEmpty()) {
-
-        }
         return ListaClientes;
     }
 
     @Override
-    public Cliente buscarPorId(int id) throws IOException {
+    public Cliente buscarPorId(int id) throws DataAccessException {
         for (Cliente cliente : listarClientes()) {
             if (cliente.getId() == id) {
                 return cliente;
@@ -104,12 +116,12 @@ public class ClienteDAOImpl_XML implements ClienteDAO {
     }
 
     @Override
-    public int contarClientes() throws IOException {
+    public int contarClientes() throws DataAccessException {
         return listarClientes().size();
     }
 
     @Override
-    public ArrayList<Cliente> buscarPorNombre(String nombre) throws IOException {
+    public ArrayList<Cliente> buscarPorNombre(String nombre) throws DataAccessException {
         ArrayList<Cliente> ListaClientesNombre = new ArrayList<>();
         for (Cliente cliente: listarClientes()){
             if (cliente.getNombre().equals(nombre)){
@@ -119,7 +131,7 @@ public class ClienteDAOImpl_XML implements ClienteDAO {
         return ListaClientesNombre;
     }
 
-    public void guardarXML(ArrayList<Cliente> ListaClientes) throws IOException {
+    public void guardarXML(ArrayList<Cliente> ListaClientes) throws DataAccessException {
         /*try(BufferedWriter bw = new BufferedWriter(new FileWriter(archivoXML))) {
             bw.write("<clientes>\n");
             for (Cliente c : ListaClientes) {
@@ -167,8 +179,12 @@ public class ClienteDAOImpl_XML implements ClienteDAO {
             transf.transform(source, file);
 
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (ParserConfigurationException e) {
+            throw new DataWriteException("Error al configurar el parser de XML", e);
+        } catch (TransformerException e) {
+            throw new DataWriteException("Error al transformar o guardar el XML", e);
+        } catch (Exception e){
+            throw new DataWriteException("Error inesperado al guardar el XML", e);
         }
 
     }

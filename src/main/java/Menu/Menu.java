@@ -148,9 +148,11 @@ public class Menu {
                     int cantidad = leerEntero();
                     System.out.print("Categoría (CATEGORIA1, CATEGORIA2, CATEGORIA3, CATEGORIA4, CATEGORIA5): ");
                     String cat = in.nextLine().toUpperCase();
+                    System.out.print("ID del proveedor: ");
+                    int idProveedor = leerEntero();
                     try {
                         productoDAO.agregarProducto(
-                                new Producto(nombre, precio, Producto.categorias.valueOf(cat), cantidad)
+                                new Producto(nombre, precio, Producto.categorias.valueOf(cat), cantidad, idProveedor)
                         );
                         System.out.println("Producto agregado correctamente");
                     } catch (IllegalArgumentException e) {

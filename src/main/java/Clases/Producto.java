@@ -11,6 +11,7 @@ public class Producto implements Externalizable {
     private int cantidad;
     private static int generadorID=0;
     private int idProducto;
+    private int idProveedor;
 
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
@@ -32,13 +33,16 @@ public class Producto implements Externalizable {
     public Producto() {
 
     }
-    public Producto(String nombre, double precio, categorias categoria,int cantidad) {
+    public Producto(String nombre, double precio, categorias categoria,int cantidad, int idProveedor) {
         setNombre(nombre);
         setPrecio(precio);
         this.categoria = categoria;
         this.cantidad=cantidad;
         generadorID++;
         idProducto = generadorID;
+    }
+    public Producto(String nombre, double precio, categorias categoria, int cantidad) {
+        this(nombre,precio,categoria,cantidad,-1);
     }
 
     public double getPrecio() {
@@ -91,6 +95,14 @@ public class Producto implements Externalizable {
         this.idProducto = idProducto;
     }
 
+    public int getIdProveedor() {
+        return idProveedor;
+    }
+
+    public void setIdProveedor(int idProveedor) {
+        this.idProveedor = idProveedor;
+    }
+
     @Override
     public String toString() {
         return "Producto{" +
@@ -99,6 +111,7 @@ public class Producto implements Externalizable {
                 ", categoria=" + categoria +
                 ",cantidad=" + cantidad +
                 ",idProducto=" + idProducto +
+                ", idProveedor=" + idProveedor +
                 '}';
     }
 }

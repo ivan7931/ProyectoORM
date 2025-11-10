@@ -111,8 +111,18 @@ public class ProveedorDAOImpl_XML implements ProveedorDAO {
     }
 
     @Override
-    public ArrayList<Producto> productosSuministrados(int idProveedor) {
-        return null;
+    public ArrayList<Producto> productosSuministrados(int idProveedor) throws IOException {
+        ProductoDAO productoDAO = new ProductoDAOImpl_XML(); // o JSON según modo
+        ArrayList<Producto> todos = productoDAO.listar();
+        ArrayList<Producto> resultado = new ArrayList<>();
+
+        for (Producto p : todos) {
+            if (p.getIdProveedor() == idProveedor) {
+                resultado.add(p);
+            }
+        }
+
+        return resultado;
     }
 
     public void guardarXML(ArrayList<Proveedor> ListaProveedores){

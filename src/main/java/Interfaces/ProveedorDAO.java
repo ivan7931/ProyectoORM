@@ -18,5 +18,5 @@ public interface ProveedorDAO {
 
     int contarProveedores() throws IOException;
 
-    ArrayList<Producto> productosSuministrados(int idProveedor);
+    ArrayList<Producto> productosSuministrados(int idProveedor) throws IOException;
 }

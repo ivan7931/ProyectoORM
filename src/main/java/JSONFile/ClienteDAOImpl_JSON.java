@@ -30,8 +30,8 @@ public class ClienteDAOImpl_JSON implements ClienteDAO {
             }
         } catch (IOException e) {
             throw new DataWriteException("Error al guardar el cliente en el archivo JSON", e);
-        } catch (DataAccessException e) {
-            throw new DataAccessException("Error al acceder a los datos de clientes", e);
+        } catch (Exception e) {
+            throw new DataAccessException(e);
         }
     }
 
@@ -55,8 +55,8 @@ public class ClienteDAOImpl_JSON implements ClienteDAO {
             }
         } catch (IOException e) {
             throw new DataWriteException("Error al eliminar el cliente en el archivo JSON", e);
-        } catch (DataReadException e) {
-            throw new DataAccessException("Error al acceder a los datos de clientes", e);
+        } catch (Exception e) {
+            throw new DataAccessException(e);
         }
     }
 
@@ -77,13 +77,13 @@ public class ClienteDAOImpl_JSON implements ClienteDAO {
             }
         } catch (IOException e) {
             throw new DataWriteException("Error al actualizar el cliente en el archivo JSON", e);
-        } catch (DataReadException e) {
-            throw new DataAccessException("Error al acceder a los datos de clientes", e);
+        }  catch (Exception e) {
+            throw new DataAccessException(e);
         }
     }
 
     @Override
-    public ArrayList<Cliente> listarClientes() throws DataReadException {
+    public ArrayList<Cliente> listarClientes() throws DataAccessException{
         ArrayList<Cliente> resultado = new ArrayList<>();
         // Crear una instancia de Jsonb
         Jsonb jsonb = JsonbBuilder.create();
@@ -112,20 +112,18 @@ public class ClienteDAOImpl_JSON implements ClienteDAO {
                     encontrado = true;
                 }
             }
-            return resultado;
-        } catch (DataReadException e) {
-            throw new DataAccessException("Error al buscar el cliente con ID" + id,e);
+            if(encontrado) {
+                return resultado;
+            }
+            else return null;
+        } catch (Exception e) {
+            throw new DataReadException("Error al buscar el cliente con ID" + id,e);
         }
     }
 
     @Override
     public int contarClientes() throws DataAccessException {
-        try {
-            ArrayList<Cliente> listaEscrita = listarClientes();
-            return listaEscrita.size();
-        } catch (DataReadException e) {
-            throw new DataAccessException("Error al contar los clientes",e);
-        }
+        return listarClientes().size();
     }
 
     @Override
@@ -137,13 +135,13 @@ public class ClienteDAOImpl_JSON implements ClienteDAO {
                 listaTemp = listarClientes();
             }
             for(int i =0;i<listaTemp.size() ;i++){
-                if(listaTemp.get(i).getNombre().equalsIgnoreCase(nombre)){
+                if(listaTemp.get(i).getNombre().equals(nombre)){
                     ListaClientesNombre.add(listaTemp.get(i));
                 }
             }
             return ListaClientesNombre;
-        } catch (DataReadException e) {
-            throw new DataAccessException("Error al buscar el cliente con nombre " + nombre,e);
+        } catch (Exception e) {
+            throw new DataReadException("Error al buscar el cliente con nombre " + nombre,e);
         }
     }
 }

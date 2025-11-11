@@ -32,8 +32,8 @@ public class ProductoDAOImpl_JSON implements ProductoDAO {
             }
         } catch (IOException e) {
             throw new DataWriteException("Error al guardar el producto en el archivo JSON", e);
-        } catch (DataAccessException e) {
-            throw new DataAccessException("Error al acceder a los datos de productos", e);
+        } catch (Exception e) {
+            throw new DataAccessException(e);
         }
     }
 
@@ -57,8 +57,8 @@ public class ProductoDAOImpl_JSON implements ProductoDAO {
             }
         } catch (IOException e) {
             throw new DataWriteException("Error al eliminar el producto en el archivo JSON", e);
-        } catch (DataReadException e) {
-            throw new DataAccessException("Error al acceder a los datos de productos", e);
+        } catch (Exception e) {
+            throw new DataAccessException(e);
         }
     }
 
@@ -79,13 +79,13 @@ public class ProductoDAOImpl_JSON implements ProductoDAO {
             }
         } catch (IOException e) {
             throw new DataWriteException("Error al actualizar el cliente en el archivo JSON", e);
-        } catch (DataReadException e) {
-            throw new DataAccessException("Error al acceder a los datos de clientes", e);
+        } catch (Exception e) {
+            throw new DataAccessException(e);
         }
     }
 
     @Override
-    public ArrayList<Producto> listar() throws DataReadException {
+    public ArrayList<Producto> listar() throws DataAccessException {
         ArrayList<Producto> resultado = new ArrayList<>();
         // Crear una instancia de Jsonb
         Jsonb jsonb = JsonbBuilder.create();
@@ -112,8 +112,8 @@ public class ProductoDAOImpl_JSON implements ProductoDAO {
                 }
             }
             return resultado;
-        } catch (DataReadException e) {
-            throw new DataAccessException("Error al buscar el producto con ID" + id, e);
+        } catch (Exception e) {
+            throw new DataReadException("Error al buscar el producto con ID" + id, e);
         }
     }
 
@@ -126,9 +126,8 @@ public class ProductoDAOImpl_JSON implements ProductoDAO {
             for (int i = 0; i < listaEscrita.size(); i++) {
                 inventario += (listaEscrita.get(i).getPrecio() * listaEscrita.get(i).getCantidad());
             }
-
             return inventario;
-        } catch (DataReadException e) {
+        } catch (Exception e) {
             throw new DataAccessException("Error al calcular el valor de inventario", e);
         }
     }
@@ -144,7 +143,7 @@ public class ProductoDAOImpl_JSON implements ProductoDAO {
                 }
             }
             return resultado;
-        } catch (DataReadException e) {
+        } catch (Exception e) {
             throw new DataAccessException("Error al listar por categoria los productos",e);
         }
     }

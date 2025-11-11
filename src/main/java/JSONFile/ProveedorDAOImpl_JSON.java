@@ -3,6 +3,7 @@ package JSONFile;
 import Clases.Cliente;
 import Clases.Producto;
 import Clases.Proveedor;
+import Excepciones.DataAccessException;
 import Interfaces.ProveedorDAO;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
@@ -19,14 +20,18 @@ public class ProveedorDAOImpl_JSON implements ProveedorDAO {
 
     }
     @Override
-    public void agregarProveedor(Proveedor p) throws IOException {
+    public void agregarProveedor(Proveedor p) throws DataAccessException {
         ArrayList<Proveedor> listaProveedores = listarProveedores();
         listaProveedores.add(p);
-        guardarJSON(listaProveedores);
+        try {
+            guardarJSON(listaProveedores);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
-    public void eliminarProveedor(int id) throws IOException {
+    public void eliminarProveedor(int id) throws DataAccessException {
         ArrayList<Proveedor> listaProveedores = listarProveedores();
         for (Proveedor proveedor : listaProveedores) {
             if (proveedor.getIdProveedor() == id) {
@@ -34,11 +39,15 @@ public class ProveedorDAOImpl_JSON implements ProveedorDAO {
                 break;
             }
         }
-        guardarJSON(listaProveedores);
+        try {
+            guardarJSON(listaProveedores);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
-    public void actualizarProveedor(Proveedor p) throws IOException {
+    public void actualizarProveedor(Proveedor p) throws DataAccessException {
         ArrayList<Proveedor> listaProveedores = listarProveedores();
         for (int i = 0; i < listaProveedores.size(); i++) {
             if (listaProveedores.get(i).getIdProveedor() == p.getIdProveedor()) {
@@ -46,11 +55,15 @@ public class ProveedorDAOImpl_JSON implements ProveedorDAO {
                 break;
             }
         }
-        guardarJSON(listaProveedores);
+        try {
+            guardarJSON(listaProveedores);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
-    public ArrayList<Proveedor> listarProveedores() throws IOException {
+    public ArrayList<Proveedor> listarProveedores() throws DataAccessException {
         ArrayList<Proveedor> proveedores = new ArrayList<>();
         // Crear una instancia de Jsonb
         Jsonb jsonb = JsonbBuilder.create();
@@ -60,12 +73,15 @@ public class ProveedorDAOImpl_JSON implements ProveedorDAO {
                 proveedores = jsonb.fromJson(fileReader, new ArrayList<Proveedor>() {
                 }.getClass().getGenericSuperclass());
             }
+            catch(Exception e) {
+                throw new DataAccessException("Error",e);
+            }
         }
         return proveedores;
     }
 
     @Override
-    public Proveedor buscarPorId(int id) throws IOException {
+    public Proveedor buscarPorId(int id) throws DataAccessException {
         ArrayList<Proveedor> listaProveedores;
         listaProveedores = listarProveedores();
         for (Proveedor proveedor : listaProveedores) {
@@ -77,7 +93,7 @@ public class ProveedorDAOImpl_JSON implements ProveedorDAO {
     }
 
     @Override
-    public int contarProveedores() throws IOException {
+    public int contarProveedores() throws DataAccessException {
         return listarProveedores().size();
     }
 
@@ -89,6 +105,9 @@ public class ProveedorDAOImpl_JSON implements ProveedorDAO {
         Jsonb jsonb = JsonbBuilder.create();
         try (FileWriter fileWriter = new FileWriter(archivoJSON)) {
             jsonb.toJson(proveedores, fileWriter);
+        }
+        catch (IOException e) {
+            throw new IOException(e);
         }
     }
 }

@@ -90,16 +90,15 @@ public class ProductoDAOImpl_XML implements ProductoDAO {
         if (!archivoXML.exists()||archivoXML.length() == 0) {
             return listaProductos;
         }
-
         try{
             SAXParserFactory factory = SAXParserFactory.newInstance();
             SAXParser parser = factory.newSAXParser();
-
+            //creamos una instancia del handler creado
             ProductoHandler handler = new ProductoHandler();
+            //el parser procese el archivo con el handler
             parser.parse(archivoXML, handler);
             listaProductos = handler.getProductos();
-
-        } catch (Exception e) {
+        } catch (ParserConfigurationException | SAXException | IOException e) {
             throw new DataReadException("Error al leer el XML de productos",e);
         }
         return listaProductos;
@@ -139,19 +138,6 @@ public class ProductoDAOImpl_XML implements ProductoDAO {
     }
 
     public void guardarXML(ArrayList<Producto> ListaProductos) throws DataAccessException {
-        /*try(BufferedWriter bw = new BufferedWriter(new FileWriter(archivoXML))) {
-            bw.write("<productos>\n");
-            for (Producto p : ListaProductos) {
-                bw.write("  <producto>\n");
-                bw.write("      <nombre>" + p.getNombre() + "</nombre>\n");
-                bw.write("      <precio>" + p.getPrecio() + "</precio>\n");
-                bw.write("      <categoria>" + p.getCategoria() + "</categoria>\n");
-                bw.write("      <cantidad>" + p.getCantidad() + "</cantidad>\n");
-                bw.write("      <id>" + p.getIdProducto() + "</id>\n");
-                bw.write("  </producto>\n");
-            }
-            bw.write("</productos>\n");
-        }*/
         try {
             // creamos el builder que nos permiterá crear documentos, etc.
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
@@ -186,14 +172,12 @@ public class ProductoDAOImpl_XML implements ProductoDAO {
             StreamResult file = new StreamResult(archivoXML);
             transf.transform(source, console);
             transf.transform(source, file);
-
-
         } catch (ParserConfigurationException e) {
             throw new DataWriteException("Error al configurar el parser de XML", e);
         } catch (TransformerException e) {
             throw new DataWriteException("Error al transformar o guardar el XML", e);
         } catch (Exception e){
-            throw new DataWriteException("Error inesperado al guardar el XML", e);
+            throw e;
         }
 
     }

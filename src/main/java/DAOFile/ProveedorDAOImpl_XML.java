@@ -32,9 +32,7 @@ public class ProveedorDAOImpl_XML implements ProveedorDAO {
     private final File archivoXML = new File("Proveedores.xml");
 
     public ProveedorDAOImpl_XML(){
-
     }
-
     @Override
     public void agregarProveedor(Proveedor p) throws DataAccessException {
         try {
@@ -95,7 +93,6 @@ public class ProveedorDAOImpl_XML implements ProveedorDAO {
         if (!archivoXML.exists() || archivoXML.length() == 0) {
             return listaProveedores;
         }
-
         try{
             SAXParserFactory factory = SAXParserFactory.newInstance();
             SAXParser parser = factory.newSAXParser();
@@ -104,7 +101,7 @@ public class ProveedorDAOImpl_XML implements ProveedorDAO {
 
             parser.parse(archivoXML,handler);
             listaProveedores = handler.getListaProveedores();
-        } catch (Exception e) {
+        } catch (ParserConfigurationException | SAXException | IOException  e) {
             throw new DataReadException("Error al leer el XML de proveedores", e);
         }
         return listaProveedores;
@@ -132,28 +129,15 @@ public class ProveedorDAOImpl_XML implements ProveedorDAO {
         ProductoDAO productoDAO = new ProductoDAOImpl_XML(); // o JSON según modo
         ArrayList<Producto> todos = productoDAO.listar();
         ArrayList<Producto> resultado = new ArrayList<>();
-
         for (Producto p : todos) {
             if (p.getIdProveedor() == idProveedor) {
                 resultado.add(p);
             }
         }
-
         return resultado;
     }
 
     public void guardarXML(ArrayList<Proveedor> ListaProveedores) throws DataAccessException {
-        /*try(BufferedWriter bw = new BufferedWriter(new FileWriter(archivoXML))) {
-            bw.write("<proveedores>\n");
-            for (Proveedor p : ListaProveedores) {
-                bw.write("  <proveedor>\n");
-                bw.write("      <nombre>" + p.getNombre() + "</nombre>\n");
-                bw.write("      <empresa>" + p.getEmpresa() + "</empresa>\n");
-                bw.write("      <id>" + p.getIdProveedor() + "</id>\n");
-                bw.write("  </proveedor>\n");
-            }
-            bw.write("</proveedores>\n");
-        }*/
         try {
             // creamos el builder que nos permiterá crear documentos, etc.
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
@@ -186,8 +170,6 @@ public class ProveedorDAOImpl_XML implements ProveedorDAO {
             // Mostrar los resultados por consola y escribirlos en el archivo.
             StreamResult file = new StreamResult(archivoXML);
             transf.transform(source, file);
-
-
         } catch (ParserConfigurationException e) {
             throw new DataWriteException("Error al configurar el parser de XML", e);
         } catch (TransformerException e) {
@@ -195,7 +177,6 @@ public class ProveedorDAOImpl_XML implements ProveedorDAO {
         } catch (Exception e){
             throw new DataWriteException("Error inesperado al guardar el XML", e);
         }
-
     }
     //metodo auxiliar que convierte el objeto a XML
     public static Element crearProducto(Proveedor p, Document documento) {

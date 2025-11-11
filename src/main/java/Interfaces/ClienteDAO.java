@@ -12,7 +12,7 @@ public interface ClienteDAO {
 
     void eliminarCliente (int id) throws DataAccessException;
 
-    void actualizarCliente (Cliente c) throws DataAccessException, IOException;
+    void actualizarCliente (Cliente c) throws DataAccessException;
 
     ArrayList<Cliente> listarClientes() throws DataAccessException;
 

@@ -89,19 +89,17 @@ public class ClienteDAOImpl_XML implements ClienteDAO {
         if (!archivoXML.exists() || archivoXML.length() == 0) {
             return ListaClientes;
         }
-
         try{
             SAXParserFactory factory = SAXParserFactory.newInstance();
             SAXParser saxParser = factory.newSAXParser();
-
+            //creamos una instancia del handler creado
             ClienteHandler handler = new ClienteHandler();
+            //el parser procese el archivo con el handler
             saxParser.parse(archivoXML, handler);
             ListaClientes = handler.getClientes();
-
-        } catch (Exception e) {
+        } catch (ParserConfigurationException | SAXException | IOException e) {
             throw new DataReadException("Error al leer el XML de clientes", e);
         }
-
         return ListaClientes;
     }
 
@@ -132,17 +130,6 @@ public class ClienteDAOImpl_XML implements ClienteDAO {
     }
 
     public void guardarXML(ArrayList<Cliente> ListaClientes) throws DataAccessException {
-        /*try(BufferedWriter bw = new BufferedWriter(new FileWriter(archivoXML))) {
-            bw.write("<clientes>\n");
-            for (Cliente c : ListaClientes) {
-                bw.write("  <cliente>\n");
-                bw.write("      <nombre>" + c.getNombre() + "</nombre>\n");
-                bw.write("      <apellido>" + c.getApellido() + "</apellido>\n");
-                bw.write("      <id>" + c.getId() + "</id>\n");
-                bw.write("  </cliente>\n");
-            }
-            bw.write("</clientes>\n");
-        }*/
         try {
             // creamos el builder que nos permiterá crear documentos, etc.
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
@@ -177,14 +164,12 @@ public class ClienteDAOImpl_XML implements ClienteDAO {
             StreamResult file = new StreamResult(archivoXML);
             transf.transform(source, console);
             transf.transform(source, file);
-
-
         } catch (ParserConfigurationException e) {
             throw new DataWriteException("Error al configurar el parser de XML", e);
         } catch (TransformerException e) {
             throw new DataWriteException("Error al transformar o guardar el XML", e);
         } catch (Exception e){
-            throw new DataWriteException("Error inesperado al guardar el XML", e);
+            throw e;
         }
 
     }

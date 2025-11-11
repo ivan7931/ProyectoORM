@@ -1,6 +1,5 @@
 package JSONFile;
 
-import Clases.Cliente;
 import Clases.Producto;
 import Clases.Proveedor;
 import Excepciones.DataAccessException;

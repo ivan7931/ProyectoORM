@@ -9,8 +9,6 @@ import Interfaces.ClienteDAO;
 import Interfaces.ProductoDAO;
 import Interfaces.ProveedorDAO;
 import JSONFile.*;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -19,7 +17,7 @@ public class Menu {
     public static Scanner in = new Scanner(System.in);
     public static void main(String[] args) {
         int opcion = 0;
-        int modo = 1;
+        int modo;
         do {
             System.out.println("===== MENÚ INICIAL =====");
             System.out.println("Selecciona una opcion:");
@@ -80,7 +78,7 @@ public class Menu {
     }
 
     public static void menuClientes(ClienteDAO clienteDAO) throws DataAccessException {
-        int opcion = 0;
+        int opcion;
         do{
             System.out.println("\n===== MENÚ CLIENTES =====");
             System.out.println("1. Agregar cliente");
@@ -117,10 +115,11 @@ public class Menu {
                         System.out.print("Nuevo apellido: ");
                         c2.setApellido(in.nextLine());
                         clienteDAO.actualizarCliente(c2);
-                        System.out.println("Actualizado correctamente."); break;
+                        System.out.println("Actualizado correctamente.");
                     } else {
-                        System.out.println("Cliente no encontrado."); break;
+                        System.out.println("Cliente no encontrado.");
                     }
+                    break;
 
                 case 5:  //eliminar un cliente
                     System.out.print("ID del cliente a eliminar: ");
@@ -135,7 +134,7 @@ public class Menu {
         } while (opcion != 6);
     }
     public static void menuProductos(ProductoDAO productoDAO) throws DataAccessException {
-        int opcion = 0;
+        int opcion;
         do{
             System.out.println("\n===== MENÚ PRODUCTOS =====");
             System.out.println("1. Agregar producto");
@@ -186,7 +185,7 @@ public class Menu {
 
     }
     public static void menuProveedores(ProveedorDAO proveedorDAO) throws DataAccessException {
-        int opcion = 0;
+        int opcion;
         do{
             System.out.println("\n===== MENÚ PROVEEDORES =====");
             System.out.println("1. Agregar proveedor");
@@ -222,10 +221,11 @@ public class Menu {
                         System.out.print("Nueva empresa: ");
                         p1.setEmpresa(in.nextLine());
                         proveedorDAO.actualizarProveedor(p1);
-                        System.out.println("Proveedor actualizado correctamente."); break;
+                        System.out.println("Proveedor actualizado correctamente.");
                     } else {
-                        System.out.println("Proveedor no encontrado."); break;
+                        System.out.println("Proveedor no encontrado.");
                     }
+                    break;
 
                 case 5 :
                     System.out.print("ID del proveedor a eliminar: ");
@@ -239,14 +239,14 @@ public class Menu {
                     // Usamos productosSuministrados
                     ArrayList<Producto> productos = proveedorDAO.productosSuministrados(id3);
                     if (productos == null || productos.isEmpty()) {
-                        System.out.println("No hay productos suministrados por este proveedor."); break;
+                        System.out.println("No hay productos suministrados por este proveedor.");
                     } else {
                         System.out.println("Productos suministrados:");
                         for (Producto producto : productos) {
                             System.out.println(producto);
                         }
-                         break;
                     }
+                    break;
 
                 case 7 : System.out.println("Volviendo al menú principal..."); break;
                 default:
@@ -257,8 +257,7 @@ public class Menu {
     private static int leerEntero() {
         while (true) {
             try {
-                int valor = Integer.parseInt(in.nextLine());
-                return valor;
+                return Integer.parseInt(in.nextLine());
             } catch (NumberFormatException e) {
                 System.out.println("Error se debe ingresar un número entero. Intente otra vez: ");
             }
@@ -267,8 +266,7 @@ public class Menu {
     private static double leerDouble() {
         while (true) {
             try {
-                double valor = Double.parseDouble(in.nextLine());
-                return valor;
+                return Double.parseDouble(in.nextLine());
             } catch (NumberFormatException e) {
                 System.out.println("Error se debe ingresar un número decimal. Intente otra vez: ");
             }

@@ -8,9 +8,9 @@ import java.util.ArrayList;
 
 public class ClienteHandler extends DefaultHandler {
 
-    private ArrayList<Cliente> clientes = new ArrayList<>();
+    private final ArrayList<Cliente> clientes = new ArrayList<>();
     private Cliente cliente;
-    private StringBuilder valores = new StringBuilder();
+    private final StringBuilder valores = new StringBuilder();
 
     public void startElement(String uri, String localName, String qName, Attributes attributes) {
         if (qName.equalsIgnoreCase("cliente")) {

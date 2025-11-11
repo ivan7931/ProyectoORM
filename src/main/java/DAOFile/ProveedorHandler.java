@@ -7,9 +7,9 @@ import org.xml.sax.helpers.DefaultHandler;
 import java.util.ArrayList;
 
 public class ProveedorHandler extends DefaultHandler {
-    ArrayList<Proveedor> ListaProveedores = new ArrayList<>();
+    private final ArrayList<Proveedor> ListaProveedores = new ArrayList<>();
     private Proveedor proveedor;
-    private StringBuilder valores = new StringBuilder();
+    private final StringBuilder valores = new StringBuilder();
 
     public void startElement(String uri, String localName, String qName, Attributes attributes) {
         if (qName.equalsIgnoreCase("proveedor")) {

@@ -1,7 +1,6 @@
 package DAOFile;
 
 import Clases.Cliente;
-import Clases.Producto;
 import Excepciones.DataAccessException;
 import Excepciones.DataReadException;
 import Excepciones.DataWriteException;
@@ -33,7 +32,7 @@ public class ClienteDAOImpl_XML implements ClienteDAO {
     public void agregarCliente(Cliente c) throws DataAccessException {
         try {
             ArrayList<Cliente> ListaClientes = listarClientes();
-            int nuevoID = 1;
+            int nuevoID;
             if (!ListaClientes.isEmpty()) {
                 int maxID = 0;
                 for (Cliente cliente : ListaClientes) {

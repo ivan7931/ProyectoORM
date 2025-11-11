@@ -1,8 +1,6 @@
 package DAOFile;
 
-import Clases.Cliente;
 import Clases.Producto;
-import Clases.Proveedor;
 import Excepciones.DataAccessException;
 import Excepciones.DataReadException;
 import Excepciones.DataWriteException;
@@ -17,9 +15,7 @@ import javax.xml.parsers.*;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -177,7 +173,7 @@ public class ProductoDAOImpl_XML implements ProductoDAO {
         } catch (TransformerException e) {
             throw new DataWriteException("Error al transformar o guardar el XML", e);
         } catch (Exception e){
-            throw e;
+            throw new DataAccessException("Error inesperado:", e);
         }
 
     }

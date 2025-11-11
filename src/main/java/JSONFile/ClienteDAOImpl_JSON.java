@@ -5,7 +5,6 @@ import Excepciones.*;
 import Interfaces.ClienteDAO;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
-import jakarta.json.bind.JsonbException;
 
 import java.io.File;
 import java.io.FileReader;
@@ -39,7 +38,7 @@ public class ClienteDAOImpl_JSON implements ClienteDAO {
     public void eliminarCliente(int id) throws DataAccessException {
         try {
             ArrayList<Cliente> listaEscrita = listarClientes();
-            Cliente aux = null;
+            Cliente aux;
             Iterator<Cliente> iterator = listaEscrita.iterator();
             boolean eliminado = false;
             while (iterator.hasNext() && !eliminado) {
@@ -134,9 +133,9 @@ public class ClienteDAOImpl_JSON implements ClienteDAO {
             if(archivoJSON.length()>0) {
                 listaTemp = listarClientes();
             }
-            for(int i =0;i<listaTemp.size() ;i++){
-                if(listaTemp.get(i).getNombre().equals(nombre)){
-                    ListaClientesNombre.add(listaTemp.get(i));
+            for (Cliente cliente : listaTemp) {
+                if (cliente.getNombre().equals(nombre)) {
+                    ListaClientesNombre.add(cliente);
                 }
             }
             return ListaClientesNombre;

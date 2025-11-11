@@ -41,7 +41,7 @@ public class ProductoDAOImpl_JSON implements ProductoDAO {
     public void eliminarProducto(int id) throws DataAccessException {
         try {
             ArrayList<Producto> listaEscrita = listar();
-            Producto aux = null;
+            Producto aux;
             Iterator<Producto> iterator = listaEscrita.iterator();
             boolean eliminado = false;
             while (iterator.hasNext() && !eliminado) {
@@ -106,9 +106,9 @@ public class ProductoDAOImpl_JSON implements ProductoDAO {
         try {
             Producto resultado = null;
             ArrayList<Producto> listaEscrita = listar();
-            for (int i = 0; i < listaEscrita.size(); i++) {
-                if (listaEscrita.get(i).getIdProducto() == id) {
-                    resultado = listaEscrita.get(i);
+            for (Producto producto : listaEscrita) {
+                if (producto.getIdProducto() == id) {
+                    resultado = producto;
                 }
             }
             return resultado;
@@ -123,8 +123,8 @@ public class ProductoDAOImpl_JSON implements ProductoDAO {
             ArrayList<Producto> listaEscrita = listar();
             double inventario = 0;
 
-            for (int i = 0; i < listaEscrita.size(); i++) {
-                inventario += (listaEscrita.get(i).getPrecio() * listaEscrita.get(i).getCantidad());
+            for (Producto producto : listaEscrita) {
+                inventario += (producto.getPrecio() * producto.getCantidad());
             }
             return inventario;
         } catch (Exception e) {
@@ -137,9 +137,9 @@ public class ProductoDAOImpl_JSON implements ProductoDAO {
         try {
             ArrayList<Producto> listaEscrita = listar();
             ArrayList<Producto> resultado = new ArrayList<>();
-            for (int i = 0; i < listaEscrita.size(); i++) {
-                if (listaEscrita.get(i).getCategoria().name().equalsIgnoreCase(categoria)) {
-                    resultado.add(listaEscrita.get(i));
+            for (Producto producto : listaEscrita) {
+                if (producto.getCategoria().name().equalsIgnoreCase(categoria)) {
+                    resultado.add(producto);
                 }
             }
             return resultado;

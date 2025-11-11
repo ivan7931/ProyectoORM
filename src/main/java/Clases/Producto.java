@@ -4,7 +4,7 @@ import java.io.*;
 
 public class Producto implements Externalizable {
 
-    public enum categorias{CATEGORIA1, CATEGORIA2, CATEGORIA3,CATEGORIA4,CATEGORIA5};
+    public enum categorias{CATEGORIA1, CATEGORIA2, CATEGORIA3,CATEGORIA4,CATEGORIA5}
     private String nombre;
     private double precio;
     private categorias categoria;

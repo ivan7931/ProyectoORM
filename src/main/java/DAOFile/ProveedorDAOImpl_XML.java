@@ -1,6 +1,5 @@
 package DAOFile;
 
-import Clases.Cliente;
 import Clases.Producto;
 import Clases.Proveedor;
 import Excepciones.DataAccessException;
@@ -13,8 +12,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
-
-import javax.xml.crypto.Data;
 import javax.xml.parsers.*;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -22,9 +19,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -109,7 +104,7 @@ public class ProveedorDAOImpl_XML implements ProveedorDAO {
 
     @Override
     public Proveedor buscarPorId(int id) throws DataAccessException {
-        ArrayList<Proveedor> listaProveedores = new ArrayList<>();
+        ArrayList<Proveedor> listaProveedores;
         listaProveedores = listarProveedores();
         for (Proveedor proveedor : listaProveedores) {
             if (proveedor.getIdProveedor() == id) {
@@ -182,7 +177,7 @@ public class ProveedorDAOImpl_XML implements ProveedorDAO {
     public static Element crearProducto(Proveedor p, Document documento) {
         Element proveed = documento.createElement("proveedor");
         proveed.appendChild(crearElemento("nombre",p.getNombre(),documento));
-        proveed.appendChild(crearElemento("empresa",""+p.getEmpresa(),documento));
+        proveed.appendChild(crearElemento("empresa", p.getEmpresa(),documento));
         proveed.appendChild(crearElemento("id_proveedor",""+p.getIdProveedor(),documento));
         return proveed;
     }

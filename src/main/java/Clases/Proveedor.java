@@ -18,6 +18,9 @@ public class Proveedor implements Externalizable {
         generadorID++;
         setIdProveedor(generadorID);
     }
+
+    public Proveedor() {}
+
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeObject(nombre);
@@ -31,8 +34,6 @@ public class Proveedor implements Externalizable {
         empresa = (String) in.readObject();
         idProveedor = in.readInt();
     }
-
-    public Proveedor() {}
 
     public String getNombre() {
         return nombre;
@@ -55,14 +56,13 @@ public class Proveedor implements Externalizable {
         }
         this.empresa = empresa;
     }
-    public static void setGeneradorID(int valor) {
-        generadorID = valor;
-    }
-
     public int getIdProveedor() {
         return idProveedor;
     }
     public  void setIdProveedor(int idProveedor) {
+        if(idProveedor<=0){
+            throw new IllegalArgumentException();
+        }
         this.idProveedor = idProveedor;
     }
     @Override

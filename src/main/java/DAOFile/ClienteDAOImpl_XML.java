@@ -64,13 +64,13 @@ public class ClienteDAOImpl_XML implements ClienteDAO {
                 }
             }
             if (!eliminado) {
-                throw new DataNotFoundException("No se encontro el cliente don ID" + id);
+                throw new DataNotFoundException("No se encontro el cliente con ID" + id);
             }
             guardarXML(ListaClientes);
         }catch (DataNotFoundException e) {
             throw e;
         }catch (Exception e) {
-            throw new DataWriteException("Error al eliminar el cliente con ID" + id, e);
+            throw new DataWriteException("Error al eliminar el cliente con ID " + id, e);
         }
     }
 
@@ -87,7 +87,7 @@ public class ClienteDAOImpl_XML implements ClienteDAO {
                 }
             }
             if (!actualizado) {
-                throw new DataNotFoundException("No se encontro el cliente don ID" + c.getId());
+                throw new DataNotFoundException("No se encontro el cliente con ID " + c.getId());
             }
             guardarXML(listaClientes);
         } catch (DataNotFoundException e) {

@@ -5,7 +5,46 @@ import Excepciones.*;
 import java.io.*;
 
 public class SistemaMain {
-    public static void copiaSeguridad(File archivo, File directorio) throws DataAccessException {
+    private static File archivo = new File(".\\Clientes.json");
+    private static File archivo2 = new File(".\\Productos.json");
+    private static File archivo3 = new File(".\\Proveedores.json");
+    private static File archivo4 = new File(".\\Clientes.xml");
+    private static File archivo5 = new File(".\\Productos.xml");
+    private static File archivo6 = new File(".\\Proveedores.xml");
+    private static File directorio = new File(".\\archivos_XML_JSON");
+
+    public static File getArchivo2() {
+        return archivo2;
+    }
+
+    public static File getArchivo() {
+        return archivo;
+    }
+
+    public static File getArchivo3() {
+        return archivo3;
+    }
+
+    public static File getDirectorio() {
+        return directorio;
+    }
+
+    public static File getArchivo4() {
+        return archivo4;
+    }
+
+    public static File getArchivo5() {
+        return archivo5;
+    }
+
+    public static File getArchivo6() {
+        return archivo6;
+    }
+
+    public static void copiaSeguridad(File archivo, File directorio) throws DataAccessException, IOException {
+        if(!directorio.exists()) {
+            directorio.mkdir();
+        }
         try(BufferedReader br = new BufferedReader(new FileReader(archivo));
         BufferedWriter bw = new BufferedWriter(new FileWriter(new File(directorio,archivo.getName()+"_BACKUP")))){
             String linea;
@@ -21,16 +60,12 @@ public class SistemaMain {
             throw new DataAccessException("Error inesperado durante la copia de seguridad", e);
         }
     }
-    public static void main(String[] args) throws DataAccessException {
-        File archivo = new File(".\\Clientes.json");
-        File archivo2 = new File(".\\Productos.json");
-        File archivo3 = new File(".\\Proveedores.json");
-        File directorio = new File(".\\archivos_XML_JSON");
-        directorio.mkdir();
-        if(directorio.exists()){
+    public static void main(String[] args) throws DataAccessException, IOException {
             copiaSeguridad(archivo,directorio);
             copiaSeguridad(archivo2,directorio);
             copiaSeguridad(archivo3,directorio);
-        }
+        copiaSeguridad(archivo4,directorio);
+        copiaSeguridad(archivo5,directorio);
+        copiaSeguridad(archivo6,directorio);
     }
 }

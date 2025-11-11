@@ -23,6 +23,18 @@ public class ProductoDAOImpl_JSON implements ProductoDAO {
     @Override
     public void agregarProducto(Producto p) throws DataAccessException {
         try {
+            ArrayList<Producto> listaProductos = listar();
+            int nuevoID;
+            if (!listaProductos.isEmpty()) {
+                int maxID = 0;
+                for (Producto producto : listaProductos) {
+                    if (producto.getIdProducto() > maxID) {
+                        maxID = producto.getIdProducto();
+                    }
+                }
+                nuevoID = maxID + 1;
+                p.setIdProducto(nuevoID);
+            }
             ArrayList<Producto> listaEscrita = listar();
             listaEscrita.add(p);
             Jsonb jsonb = JsonbBuilder.create();

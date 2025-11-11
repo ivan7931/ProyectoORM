@@ -11,22 +11,23 @@ import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args)throws DataAccessException {
-        Producto p1 = new Producto("Manzanas", 2.50, Producto.categorias.CATEGORIA2, 100);
-        Producto p2 = new Producto("Laptop", 1200.50, Producto.categorias.CATEGORIA1, 10);
-        Producto p3 = new Producto("Silla de oficina", 85.99, Producto.categorias.CATEGORIA3, 20);
-        Producto p4 = new Producto("Camiseta", 15.50, Producto.categorias.CATEGORIA5, 50);
-        Producto p5 = new Producto("Manzanas", 2.50, Producto.categorias.CATEGORIA2, 100);
-        Producto p6 = new Producto("Auriculares", 59.90, Producto.categorias.CATEGORIA4, 30);
-        Producto p7 = new Producto("Smartphone", 899.99, Producto.categorias.CATEGORIA1, 25);
-        Producto p8 = new Producto("Tablet", 499.50, Producto.categorias.CATEGORIA1, 15);
-        Producto p9 = new Producto("Peras", 3.10, Producto.categorias.CATEGORIA2, 80);
-        Producto p10 = new Producto("Plátanos", 2.20, Producto.categorias.CATEGORIA2, 120);
-        Producto p11 = new Producto("Mesa de comedor", 250.00, Producto.categorias.CATEGORIA3, 8);
-        Producto p12 = new Producto("Estantería", 120.75, Producto.categorias.CATEGORIA3, 12);
-        Producto p13 = new Producto("Teclado inalámbrico", 45.99, Producto.categorias.CATEGORIA4, 25);
-        Producto p14 = new Producto("Ratón ergonómico", 35.50, Producto.categorias.CATEGORIA4, 40);
-        Producto p15 = new Producto("Pantalones", 29.90, Producto.categorias.CATEGORIA5, 60);
-        Producto p16 = new Producto("Chaqueta", 79.99, Producto.categorias.CATEGORIA5, 20);
+        Producto p1 = new Producto("Manzanas", 2.50, Producto.categorias.CATEGORIA2, 100, 1);
+        Producto p2 = new Producto("Laptop", 1200.50, Producto.categorias.CATEGORIA1, 10, 2);
+        Producto p3 = new Producto("Silla de oficina", 85.99, Producto.categorias.CATEGORIA3, 20, 3);
+        Producto p4 = new Producto("Camiseta", 15.50, Producto.categorias.CATEGORIA5, 50, 1);
+        Producto p5 = new Producto("Manzanas", 2.50, Producto.categorias.CATEGORIA2, 100, 1);
+        Producto p6 = new Producto("Auriculares", 59.90, Producto.categorias.CATEGORIA4, 30, 2);
+        Producto p7 = new Producto("Smartphone", 899.99, Producto.categorias.CATEGORIA1, 25, 2);
+        Producto p8 = new Producto("Tablet", 499.50, Producto.categorias.CATEGORIA1, 15, 2);
+        Producto p9 = new Producto("Peras", 3.10, Producto.categorias.CATEGORIA2, 80, 1);
+        Producto p10 = new Producto("Plátanos", 2.20, Producto.categorias.CATEGORIA2, 120, 1);
+        Producto p11 = new Producto("Mesa de comedor", 250.00, Producto.categorias.CATEGORIA3, 8, 3);
+        Producto p12 = new Producto("Estantería", 120.75, Producto.categorias.CATEGORIA3, 12, 3);
+        Producto p13 = new Producto("Teclado inalámbrico", 45.99, Producto.categorias.CATEGORIA4, 25, 2);
+        Producto p14 = new Producto("Ratón ergonómico", 35.50, Producto.categorias.CATEGORIA4, 40, 2);
+        Producto p15 = new Producto("Pantalones", 29.90, Producto.categorias.CATEGORIA5, 60, 1);
+        Producto p16 = new Producto("Chaqueta", 79.99, Producto.categorias.CATEGORIA5, 20, 1);
+
         ProductoDAOImpl_JSON productoDAO = new ProductoDAOImpl_JSON();
         productoDAO.agregarProducto(p1);
         productoDAO.agregarProducto(p2);
@@ -99,8 +100,7 @@ public class Main {
         //CLIENTES TO JSON
         ClienteDAOImpl_JSON clienteJSON = new ClienteDAOImpl_JSON();
         ArrayList<Cliente> listaJSON;
-       clienteJSON.listarClientes();
-        clienteJSON.eliminarCliente(5);
+        clienteJSON.listarClientes();
         clienteJSON.listarClientes();
         System.out.println(clienteJSON.contarClientes());
         clienteJSON.agregarCliente(c1);
@@ -115,11 +115,14 @@ public class Main {
         clienteJSON.agregarCliente(c10);
         clienteJSON.agregarCliente(c11);
         clienteJSON.agregarCliente(c12);
+        //clienteJSON.eliminarCliente(5);
         listaJSON= clienteJSON.listarClientes();
         for(Cliente c : listaJSON) {
             System.out.println(c);
         }
         ClienteDAOImpl_XML clienteDAO = new ClienteDAOImpl_XML();
+        //clienteDAO.eliminarCliente(3);
+        //clienteDAO.eliminarCliente(4);
         ArrayList<Cliente> listaClientes;
         clienteDAO.agregarCliente(c1);
         clienteDAO.agregarCliente(c2);
@@ -133,7 +136,7 @@ public class Main {
         clienteDAO.agregarCliente(c10);
         clienteDAO.agregarCliente(c11);
         clienteDAO.agregarCliente(c12);
-        clienteDAO.eliminarCliente(12);
+        //clienteDAO.eliminarCliente(12);
         listaClientes=clienteDAO.listarClientes();
         for(Cliente c : listaClientes) {
             System.out.println(c);
@@ -152,7 +155,7 @@ public class Main {
         proveedorJSON.agregarProveedor(prov4);
         proveedorJSON.agregarProveedor(prov5);
         proveedorJSON.agregarProveedor(prov6);
-        proveedorJSON.eliminarProveedor(4);
+        //proveedorJSON.eliminarProveedor(4);
         System.out.println(proveedorJSON.contarProveedores());
         System.out.println(proveedorJSON.buscarPorId(3));
         System.out.println(proveedorJSON.buscarPorId(4));
@@ -171,6 +174,26 @@ public class Main {
         for(Proveedor p : listaProveedor) {
             System.out.println(p.toString());
         }
+
+        //ERROR
+           // nombre nulo
+        /*Cliente c24 = new Cliente("Ana", "NUEVO cliente");       // apellido nulo
+        ClienteDAOImpl_JSON cJSON = new ClienteDAOImpl_JSON();
+        cJSON.agregarCliente(c24);*/
+        //Producto p26 = new Producto("Mouse", 25.0, Producto.categorias.CATEGORIA1, 10, 2);   // precio negativo
+        /*Producto p2 = new Producto("Teclado", 40.0, Producto.categorias.CATEGORIA3, -5, 1);  // cantidad negativa
+        Producto p3 = new Producto("", 100.0, Producto.categorias.CATEGORIA2, 1, 1);         // nombre vacío
+        Producto p4 = new Producto("Laptop", 1200.0, null, 2, 1);                             // categoría nula*/
+        //ProductoDAOImpl_JSON prodJSON = new ProductoDAOImpl_JSON();
+        //prodJSON.agregarProducto(p1);
+
+        /*Proveedor pr1 = new Proveedor("aaa", "123456789");          // nombre vacío
+        ProveedorDAOImpl_JSON pJSON = new ProveedorDAOImpl_JSON();
+        pJSON.agregarProveedor(pr1);
+        Proveedor pr2 = new Proveedor("TecnoSur", "123456789"); // email inválido
+        Proveedor pr3 = new Proveedor("MegaPC", "abcde");   // teléfono inválido
+        Proveedor pr4 = new Proveedor("SoftWareX", "");          // teléfono vacío*/
+
 
     }
 }

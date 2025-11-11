@@ -30,6 +30,7 @@ public class ProductoHandler extends DefaultHandler {
                 case "categoria": producto.setCategoria(Producto.categorias.valueOf(valores.toString())); break;
                 case "cantidad": producto.setCantidad(Integer.parseInt(valores.toString())); break;
                 case "id_producto": producto.setIdProducto(Integer.parseInt(valores.toString())); break;
+                case "id_proveedor": producto.setIdProveedor(Integer.parseInt(valores.toString())); break;
                 case "producto": productos.add(producto); break;
             }
         }

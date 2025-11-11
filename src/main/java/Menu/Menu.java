@@ -66,9 +66,12 @@ public class Menu {
                         break;
                     case 4:
                         try{
-                            SistemaMain.copiaSeguridad(archivoClientes, directorioBackup);
-                            SistemaMain.copiaSeguridad(archivoProductos, directorioBackup);
-                            SistemaMain.copiaSeguridad(archivoProveedores, directorioBackup);
+                            SistemaMain.copiaSeguridad(SistemaMain.getArchivo(), SistemaMain.getDirectorio());
+                            SistemaMain.copiaSeguridad(SistemaMain.getArchivo2(), SistemaMain.getDirectorio());
+                            SistemaMain.copiaSeguridad(SistemaMain.getArchivo3(), SistemaMain.getDirectorio());
+                            SistemaMain.copiaSeguridad(SistemaMain.getArchivo4(), SistemaMain.getDirectorio());
+                            SistemaMain.copiaSeguridad(SistemaMain.getArchivo5(), SistemaMain.getDirectorio());
+                            SistemaMain.copiaSeguridad(SistemaMain.getArchivo6(), SistemaMain.getDirectorio());
                             System.out.println("Copia de seguridad creada con exito");
                         } catch (DataAccessException e){
                             System.err.println("Error al hacer la copia de seguridad");

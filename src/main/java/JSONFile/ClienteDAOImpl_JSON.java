@@ -20,6 +20,18 @@ public class ClienteDAOImpl_JSON implements ClienteDAO {
     @Override
     public void agregarCliente(Cliente c) throws DataAccessException {
         try {
+            ArrayList<Cliente> ListaClientes = listarClientes();
+            int nuevoID = 1;
+            if (!ListaClientes.isEmpty()) {
+                int maxID = 0;
+                for (Cliente cliente : ListaClientes) {
+                    if (cliente.getId() > maxID) {
+                        maxID = cliente.getId();
+                    }
+                }
+                nuevoID = maxID + 1;
+                c.setId(nuevoID);
+            }
             ArrayList<Cliente> listaEscrita = listarClientes();
             listaEscrita.add(c);
             Jsonb jsonb = JsonbBuilder.create();

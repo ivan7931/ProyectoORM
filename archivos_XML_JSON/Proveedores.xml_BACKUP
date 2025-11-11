@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<proveedores>
+    <proveedor>
+        <nombre>Juan Pérez</nombre>
+        <empresa>Frutas y Verduras S.A.</empresa>
+        <id_proveedor>1</id_proveedor>
+    </proveedor>
+    <proveedor>
+        <nombre>Laura Gómez</nombre>
+        <empresa>Electrónica Global</empresa>
+        <id_proveedor>2</id_proveedor>
+    </proveedor>
+    <proveedor>
+        <nombre>Carlos Ramírez</nombre>
+        <empresa>Muebles y Hogar S.L.</empresa>
+        <id_proveedor>3</id_proveedor>
+    </proveedor>
+    <proveedor>
+        <nombre>Ana Torres</nombre>
+        <empresa>Ropa y Moda S.A.</empresa>
+        <id_proveedor>4</id_proveedor>
+    </proveedor>
+    <proveedor>
+        <nombre>Miguel Sánchez</nombre>
+        <empresa>Tecnología Avanzada</empresa>
+        <id_proveedor>5</id_proveedor>
+    </proveedor>
+    <proveedor>
+        <nombre>Lucía Fernández</nombre>
+        <empresa>Alimentos Naturales</empresa>
+        <id_proveedor>6</id_proveedor>
+    </proveedor>
+</proveedores>

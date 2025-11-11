@@ -20,6 +20,7 @@ public class Producto implements Externalizable {
         out.writeObject(categoria.name());
         out.writeInt(cantidad);
         out.writeInt(idProducto);
+        out.writeInt(idProveedor);
     }
 
     @Override
@@ -29,6 +30,7 @@ public class Producto implements Externalizable {
         categoria = categorias.valueOf((String) in.readObject());
         cantidad = in.readInt();
         idProducto = in.readInt();
+        idProveedor = in.readInt();
     }
     public Producto() {
 
@@ -40,6 +42,7 @@ public class Producto implements Externalizable {
         this.cantidad=cantidad;
         generadorID++;
         idProducto = generadorID;
+        this.idProveedor = idProveedor;
     }
     public Producto(String nombre, double precio, categorias categoria, int cantidad) {
         this(nombre,precio,categoria,cantidad,-1);
@@ -76,22 +79,26 @@ public class Producto implements Externalizable {
     }
 
     public void setCantidad(int cantidad) {
+        if(cantidad<0){
+            throw new IllegalArgumentException();
+        }
         this.cantidad = cantidad;
     }
 
     public void setCategoria(categorias categoria) {
+        if(categoria==null){
+            throw new IllegalArgumentException();
+        }
         this.categoria = categoria;
     }
-
-    public static void setGeneradorID(int valor) {
-        generadorID = valor;
-    }
-
     public int getIdProducto() {
         return idProducto;
     }
 
     public void setIdProducto(int idProducto) {
+        if(idProducto<=0){
+            throw new IllegalArgumentException();
+        }
         this.idProducto = idProducto;
     }
 
@@ -100,6 +107,9 @@ public class Producto implements Externalizable {
     }
 
     public void setIdProveedor(int idProveedor) {
+        if(idProveedor<=0){
+            throw new IllegalArgumentException();
+        }
         this.idProveedor = idProveedor;
     }
 

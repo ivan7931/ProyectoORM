@@ -60,10 +60,10 @@ public class Cliente implements Externalizable{
     }
 
     public void setId(int id) {
+        if(id <=0){
+            throw new IllegalArgumentException();
+        }
         this.id = id;
-    }
-    public static void setGeneradorID(int valor) {
-        generadorID = valor;
     }
 
     @Override

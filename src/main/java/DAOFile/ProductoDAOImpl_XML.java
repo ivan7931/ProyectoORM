@@ -200,6 +200,7 @@ public class ProductoDAOImpl_XML implements ProductoDAO {
         prod.appendChild(crearElemento("categoria",""+p.getCategoria(),documento));
         prod.appendChild(crearElemento("cantidad",""+p.getCantidad(),documento));
         prod.appendChild(crearElemento("id_producto",""+p.getIdProducto(),documento));
+        prod.appendChild(crearElemento("id_proveedor",""+p.getIdProveedor(),documento));
         return prod;
     }
     public static Element crearElemento(String nombre, String valor, Document documento) {

@@ -22,6 +22,17 @@ public class ProveedorDAOImpl_JSON implements ProveedorDAO {
     @Override
     public void agregarProveedor(Proveedor p) throws DataAccessException {
         ArrayList<Proveedor> listaProveedores = listarProveedores();
+        int nuevoID;
+        if (!listaProveedores.isEmpty()) {
+            int maxID = 0;
+            for (Proveedor proveedor : listaProveedores) {
+                if (proveedor.getIdProveedor() > maxID) {
+                    maxID = proveedor.getIdProveedor();
+                }
+            }
+            nuevoID = maxID + 1;
+            p.setIdProveedor(nuevoID);
+        }
         listaProveedores.add(p);
         try {
             guardarJSON(listaProveedores);

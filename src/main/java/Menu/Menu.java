@@ -254,7 +254,7 @@ public class Menu {
             }
         } while (opcion != 7);
     }
-    private static int leerEntero() {
+    private static int leerEntero() { //Metodo para comprobar que el numero introducido es un int de forma segura
         while (true) {
             try {
                 return Integer.parseInt(in.nextLine());
@@ -263,7 +263,7 @@ public class Menu {
             }
         }
     }
-    private static double leerDouble() {
+    private static double leerDouble() { //Metodo para comprobar que el numero introducido es un double de forma segura
         while (true) {
             try {
                 return Double.parseDouble(in.nextLine());

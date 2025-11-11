@@ -1,9 +1,11 @@
 package Clases;
 
+import Excepciones.*;
+
 import java.io.*;
 
 public class SistemaMain {
-    public static void copiaSeguridad(File archivo, File directorio) throws IOException{
+    public static void copiaSeguridad(File archivo, File directorio) throws DataAccessException {
         try(BufferedReader br = new BufferedReader(new FileReader(archivo));
         BufferedWriter bw = new BufferedWriter(new FileWriter(new File(directorio,archivo.getName()+"_BACKUP")))){
             String linea;
@@ -11,12 +13,15 @@ public class SistemaMain {
                 bw.write(linea);
                 bw.newLine();
             }
-        }
-        catch(IOException e){
-            throw e;
+        } catch (FileNotFoundException e) {
+            throw new DataReadException("No se encontró el archivo: " + archivo.getName(), e);
+        } catch (IOException e) {
+            throw new DataWriteException("Error al escribir la copia de seguridad", e);
+        } catch (Exception e) {
+            throw new DataAccessException("Error inesperado durante la copia de seguridad", e);
         }
     }
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws DataAccessException {
         File archivo = new File(".\\Clientes.json");
         File archivo2 = new File(".\\Productos.json");
         File archivo3 = new File(".\\Proveedores.json");
@@ -27,6 +32,5 @@ public class SistemaMain {
             copiaSeguridad(archivo2,directorio);
             copiaSeguridad(archivo3,directorio);
         }
-
     }
 }

@@ -3,6 +3,7 @@ package JSONFile;
 import Clases.Producto;
 import Clases.Proveedor;
 import Excepciones.DataAccessException;
+import Excepciones.DataNotFoundException;
 import Interfaces.ProveedorDAO;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
@@ -31,16 +32,24 @@ public class ProveedorDAOImpl_JSON implements ProveedorDAO {
 
     @Override
     public void eliminarProveedor(int id) throws DataAccessException {
-        ArrayList<Proveedor> listaProveedores = listarProveedores();
-        for (Proveedor proveedor : listaProveedores) {
-            if (proveedor.getIdProveedor() == id) {
-                listaProveedores.remove(proveedor);
-                break;
-            }
-        }
         try {
+            ArrayList<Proveedor> listaProveedores = listarProveedores();
+            boolean eliminado = false;
+            for (Proveedor proveedor : listaProveedores) {
+                if (proveedor.getIdProveedor() == id) {
+                    listaProveedores.remove(proveedor);
+                    eliminado = true;
+                    break;
+                }
+            }
+            if (!eliminado) {
+                throw new DataNotFoundException("No se encontro el proveedor");
+            }
+
             guardarJSON(listaProveedores);
-        } catch (IOException e) {
+        } catch (DataNotFoundException e){
+            throw e;
+        }catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -88,7 +97,7 @@ public class ProveedorDAOImpl_JSON implements ProveedorDAO {
                 return proveedor;
             }
         }
-        return null;
+        throw new DataNotFoundException("No se encontro el proveedor con ID" + id);
     }
 
     @Override

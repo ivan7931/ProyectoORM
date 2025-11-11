@@ -46,13 +46,19 @@ public class ClienteDAOImpl_JSON implements ClienteDAO {
                 if (aux.getId() == id) {
                     iterator.remove();
                     eliminado = true;
+                    break;
                 }
+            }
+            if (!eliminado) {
+                throw new DataNotFoundException("No se encontro el cliente con id " + id);
             }
             Jsonb jsonb = JsonbBuilder.create();
             try (FileWriter fileWriter = new FileWriter(archivoJSON)) {
                 jsonb.toJson(listaEscrita, fileWriter);
             }
-        } catch (IOException e) {
+        } catch (DataNotFoundException e){
+            throw e;
+        }   catch (IOException e) {
             throw new DataWriteException("Error al eliminar el cliente en el archivo JSON", e);
         } catch (Exception e) {
             throw new DataAccessException(e);
@@ -70,11 +76,16 @@ public class ClienteDAOImpl_JSON implements ClienteDAO {
                     actualizado = true;
                 }
             }
+            if (!actualizado) {
+                throw new DataNotFoundException("No se encontro el cliente");
+            }
             Jsonb jsonb = JsonbBuilder.create();
             try (FileWriter fileWriter = new FileWriter(archivoJSON)) {
                 jsonb.toJson(listaEscrita, fileWriter);
             }
-        } catch (IOException e) {
+        } catch (DataNotFoundException e){
+            throw e;
+        }catch (IOException e) {
             throw new DataWriteException("Error al actualizar el cliente en el archivo JSON", e);
         }  catch (Exception e) {
             throw new DataAccessException(e);
@@ -114,8 +125,10 @@ public class ClienteDAOImpl_JSON implements ClienteDAO {
             if(encontrado) {
                 return resultado;
             }
-            else return null;
-        } catch (Exception e) {
+            else throw new DataNotFoundException("No se encontro el cliente con ID:" + id);
+        } catch (DataNotFoundException e) {
+            throw e;
+        }catch (Exception e) {
             throw new DataReadException("Error al buscar el cliente con ID" + id,e);
         }
     }

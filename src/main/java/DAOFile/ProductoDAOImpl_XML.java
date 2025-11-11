@@ -2,6 +2,7 @@ package DAOFile;
 
 import Clases.Producto;
 import Excepciones.DataAccessException;
+import Excepciones.DataNotFoundException;
 import Excepciones.DataReadException;
 import Excepciones.DataWriteException;
 import Interfaces.ProductoDAO;
@@ -52,13 +53,20 @@ public class ProductoDAOImpl_XML implements ProductoDAO {
     public void eliminarProducto(int id) throws DataAccessException {
         try {
             ArrayList<Producto> listaProductos = listar();
+            boolean eliminado = false;
             for (int i = 0; i < listaProductos.size(); i++) {
                 if (listaProductos.get(i).getIdProducto() == id) {
                     listaProductos.remove(i);
+                    eliminado = true;
                     break;
                 }
             }
+            if (!eliminado) {
+                throw new DataNotFoundException("No se encontró el producto con ID" + id);
+            }
             guardarXML(listaProductos);
+        } catch (DataNotFoundException e){
+            throw e;
         } catch (Exception e) {
             throw new DataWriteException("Error al eliminar el producto con ID" + id,e);
         }
@@ -68,15 +76,22 @@ public class ProductoDAOImpl_XML implements ProductoDAO {
     public void actualizarProducto(Producto p) throws DataAccessException {
         try {
             ArrayList<Producto> listaProductos = listar();
+            boolean actualizado = false;
             for (int i = 0; i < listaProductos.size(); i++) {
                 if (listaProductos.get(i).getIdProducto() == p.getIdProducto()) {
                     listaProductos.set(i, p);
+                    actualizado = true;
                     break;
                 }
             }
+            if (!actualizado) {
+                throw new DataNotFoundException("No se encontro el producto con ID" + p.getIdProducto());
+            }
             guardarXML(listaProductos);
+        } catch (DataNotFoundException e) {
+            throw e;
         } catch (Exception e) {
-            throw new DataWriteException("Error al actualizar el producto con ID" + p.getIdProducto(), e);
+            throw new DataWriteException("Error al actualizar el producto con ID " + p.getIdProducto(), e);
         }
     }
 
@@ -108,7 +123,7 @@ public class ProductoDAOImpl_XML implements ProductoDAO {
                 return producto;
             }
         }
-        return null;
+        throw new DataNotFoundException("No se encontro el producto con ID" + id);
     }
 
     @Override

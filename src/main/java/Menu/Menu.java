@@ -3,6 +3,7 @@ package Menu;
 import Clases.Cliente;
 import Clases.Producto;
 import Clases.Proveedor;
+import Clases.SistemaMain;
 import DAOFile.*;
 import Excepciones.DataAccessException;
 import Interfaces.ClienteDAO;
@@ -32,7 +33,8 @@ public class Menu {
                 System.out.println("1. Gestionar Clientes");
                 System.out.println("2. Gestionar Productos");
                 System.out.println("3. Gestionar Proveedores");
-                System.out.println("4. Salir");
+                System.out.println("4. Hacer copia de seguridad de todos los archivos");
+                System.out.println("5. Salir");
                 opcion = leerEntero();//llamamos a la funcion leeEntero para controlar que el dato introducido sea valido
                 switch (opcion) {
                     case 1:
@@ -63,6 +65,16 @@ public class Menu {
                         menuProveedores(proveedorDAO);
                         break;
                     case 4:
+                        try{
+                            SistemaMain.copiaSeguridad(archivoClientes, directorioBackup);
+                            SistemaMain.copiaSeguridad(archivoProductos, directorioBackup);
+                            SistemaMain.copiaSeguridad(archivoProveedores, directorioBackup);
+                            System.out.println("Copia de seguridad creada con exito");
+                        } catch (DataAccessException e){
+                            System.err.println("Error al hacer la copia de seguridad");
+                        }
+                        break;
+                    case 5:
                         System.out.println("Saliendo..."); break;
                     default: System.out.println("Error, elija una opcion correcta"); break;
                 }
@@ -74,7 +86,7 @@ public class Menu {
             } catch (Exception e) {
                 System.err.println("Error inesperado: " + e.getMessage());
             }
-        } while (opcion != 4);
+        } while (opcion != 5);
     }
 
     public static void menuClientes(ClienteDAO clienteDAO) throws DataAccessException {

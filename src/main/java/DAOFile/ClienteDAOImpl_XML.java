@@ -2,6 +2,7 @@ package DAOFile;
 
 import Clases.Cliente;
 import Excepciones.DataAccessException;
+import Excepciones.DataNotFoundException;
 import Excepciones.DataReadException;
 import Excepciones.DataWriteException;
 import Interfaces.ClienteDAO;
@@ -54,14 +55,21 @@ public class ClienteDAOImpl_XML implements ClienteDAO {
     public void eliminarCliente(int id) throws DataAccessException {
         try {
             ArrayList<Cliente> ListaClientes = listarClientes();
+            boolean eliminado = false;
             for (int i = 0; i < ListaClientes.size(); i++) {
                 if (ListaClientes.get(i).getId() == id) {
                     ListaClientes.remove(i);
+                    eliminado = true;
                     break;
                 }
             }
+            if (!eliminado) {
+                throw new DataNotFoundException("No se encontro el cliente don ID" + id);
+            }
             guardarXML(ListaClientes);
-        } catch (Exception e) {
+        }catch (DataNotFoundException e) {
+            throw e;
+        }catch (Exception e) {
             throw new DataWriteException("Error al eliminar el cliente con ID" + id, e);
         }
     }
@@ -70,14 +78,21 @@ public class ClienteDAOImpl_XML implements ClienteDAO {
     public void actualizarCliente(Cliente c) throws DataAccessException {
         try {
             ArrayList<Cliente> listaClientes = listarClientes();
+            boolean actualizado = false;
             for (int i = 0; i < listaClientes.size(); i++) {
                 if (listaClientes.get(i).getId() == c.getId()) {
                     listaClientes.set(i, c);
+                    actualizado = true;
                     break;
                 }
             }
+            if (!actualizado) {
+                throw new DataNotFoundException("No se encontro el cliente don ID" + c.getId());
+            }
             guardarXML(listaClientes);
-        } catch (Exception e) {
+        } catch (DataNotFoundException e) {
+            throw e;
+        }catch (Exception e) {
             throw new DataWriteException("Error al actualizar el cliente con ID"+ c.getId(),e);
         }
     }
@@ -109,7 +124,7 @@ public class ClienteDAOImpl_XML implements ClienteDAO {
                 return cliente;
             }
         }
-        return null;
+        throw new DataNotFoundException("No se encontro el cliente con ID" + id);
     }
 
     @Override

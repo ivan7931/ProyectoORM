@@ -3,6 +3,7 @@ package DAOFile;
 import Clases.Producto;
 import Clases.Proveedor;
 import Excepciones.DataAccessException;
+import Excepciones.DataNotFoundException;
 import Excepciones.DataReadException;
 import Excepciones.DataWriteException;
 import Interfaces.ProductoDAO;
@@ -54,14 +55,21 @@ public class ProveedorDAOImpl_XML implements ProveedorDAO {
     public void eliminarProveedor(int id) throws DataAccessException {
         try {
             ArrayList<Proveedor> listaProveedores = listarProveedores();
+            boolean eliminado = false;
             for (Proveedor proveedor : listaProveedores) {
                 if (proveedor.getIdProveedor() == id) {
                     listaProveedores.remove(proveedor);
+                    eliminado = true;
                     break;
                 }
             }
+            if (!eliminado) {
+                throw new DataNotFoundException("No se encontro el proveedor con ID"+ id);
+            }
             guardarXML(listaProveedores);
-        } catch (Exception e) {
+        } catch (DataNotFoundException e) {
+            throw e;
+        }catch (Exception e) {
             throw new DataWriteException("Error al eliminar el proveedor con ID" + id, e);
         }
     }
@@ -70,14 +78,21 @@ public class ProveedorDAOImpl_XML implements ProveedorDAO {
     public void actualizarProveedor(Proveedor p) throws DataAccessException {
         try {
             ArrayList<Proveedor> listaProveedores = listarProveedores();
+            boolean actualizado = false;
             for (int i = 0; i < listaProveedores.size(); i++) {
                 if (listaProveedores.get(i).getIdProveedor() == p.getIdProveedor()) {
                     listaProveedores.set(i, p);
+                    actualizado = true;
                     break;
                 }
             }
+            if (!actualizado) {
+                throw new DataNotFoundException("No se encontro el proveedor con ID"+ p.getIdProveedor());
+            }
             guardarXML(listaProveedores);
-        } catch (Exception e) {
+        } catch (DataNotFoundException e) {
+           throw e;
+        }catch (Exception e) {
             throw new DataWriteException("Error al actualizar el proveedos con ID" + p.getIdProveedor(), e);
         }
     }
@@ -111,7 +126,7 @@ public class ProveedorDAOImpl_XML implements ProveedorDAO {
                 return proveedor;
             }
         }
-        return null;
+        throw new DataNotFoundException("No se encontro el proveedor con ID"+ id);
     }
 
     @Override

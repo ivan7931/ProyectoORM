@@ -6,6 +6,7 @@ import Excepciones.DataNotFoundException;
 import Excepciones.DataWriteException;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface ProductoDAO {

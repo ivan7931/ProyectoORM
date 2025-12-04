@@ -6,8 +6,8 @@
         <id>1</id>
     </cliente>
     <cliente>
-        <nombre>Luis</nombre>
-        <apellido>Pérez</apellido>
+        <nombre>Pepe</nombre>
+        <apellido>Perez</apellido>
         <id>2</id>
     </cliente>
     <cliente>
@@ -54,5 +54,10 @@
         <nombre>Valeria</nombre>
         <apellido>Torres</apellido>
         <id>11</id>
+    </cliente>
+    <cliente>
+        <nombre>as</nombre>
+        <apellido>as</apellido>
+        <id>12</id>
     </cliente>
 </clientes>

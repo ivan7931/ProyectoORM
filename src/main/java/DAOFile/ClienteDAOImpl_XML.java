@@ -190,7 +190,7 @@ public class ClienteDAOImpl_XML implements ClienteDAO {
     //metodo auxiliar que convierte el objeto a XML
     public static Element crearProducto(Cliente c, Document documento) {
         Element client = documento.createElement("cliente");
-        client.appendChild(crearElemento("nombre",c.getNombre(),documento));
+        client.appendChild(crearElemento("nombre",""+c.getNombre(),documento));
         client.appendChild(crearElemento("apellido",""+c.getApellido(),documento));
         client.appendChild(crearElemento("id",""+c.getId(),documento));
         return client;

@@ -131,9 +131,9 @@ public class Menu {
                         c2.setApellido(in.nextLine());
                         clienteDAO.actualizarCliente(c2);
                         System.out.println("Actualizado correctamente.");
-                    } else {
+                    } /*else {
                         System.out.println("Cliente no encontrado.");
-                    }
+                    }*///segun la implementación no entraria nuca
                     break;
 
                 case 5:  //eliminar un cliente
@@ -156,7 +156,8 @@ public class Menu {
             System.out.println("2. Listar productos");
             System.out.println("3. Eliminar producto");
             System.out.println("4. Calcular valor inventario");
-            System.out.println("5. Volver");
+            System.out.println("5. Buscar por id");
+            System.out.println("6. Volver");
             opcion = leerEntero();
             switch(opcion){
                 case 1 : //Agregamos un producto
@@ -191,7 +192,11 @@ public class Menu {
                     System.out.println("Producto eliminado."); break;
 
                 case 4: System.out.println("Valor total inventario: " + productoDAO.calcularValorInventario()); break;
-                case 5:
+                case 5:System.out.print("ID del producto: ");
+                    int id2 = leerEntero();
+                    System.out.println(productoDAO.buscarPorId(id2).toString());
+                    break;
+                case 6:
                     System.out.println("Volviendo..."); break;
                 default:
                     System.out.println("Error, elija una opcion correcta"); break;

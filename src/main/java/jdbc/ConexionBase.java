@@ -21,5 +21,4 @@ public class ConexionBase {
             throw new ConexionException("Error al generar la conexion con la base de datos", ex);
         }
     }
-
 }

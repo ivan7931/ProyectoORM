@@ -7,11 +7,15 @@ import Excepciones.QueryException;
 import Interfaces.ProductoDAO;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ProductoJDBC implements ProductoDAO {
+    private static final String URL = "jdbc:postgresql://localhost:5433/proyecto_DAO";
+    private static final String USER = "usuario_base";
+    private static final String PASSWORD = "usuario_base";
     @Override
     public void agregarProducto(Producto p) throws DataAccessException {
         Connection conexion = ConexionBase.getConexion();
@@ -36,21 +40,25 @@ public class ProductoJDBC implements ProductoDAO {
 
     @Override
     public void eliminarProducto(int id) throws DataAccessException {
-        Connection conexion = ConexionBase.getConexion();
+        try(Connection conexion = ConexionBase.getConexion()){
+            String sql = "DELETE FROM gestion_tienda.producto WHERE id_producto = ?";
 
-        String sql = "DELETE FROM gestion_tienda.producto WHERE id_producto = ?";
+            try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+                ps.setInt(1, id);
+                int filasAfectadas = ps.executeUpdate();
 
-        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
-            ps.setInt(1, id);
-            int filasAfectadas = ps.executeUpdate();
+                if (filasAfectadas == 0) {
+                    throw new QueryException("No existe un producto con el ID especificado");
+                }
 
-            if (filasAfectadas == 0) {
-                throw new QueryException("No existe un producto con el ID especificado");
+            } catch (SQLException e) {
+                throw new QueryException("Error al eliminar el producto", e);
             }
-
-        } catch (SQLException e) {
-            throw new QueryException("Error al eliminar el producto", e);
         }
+        catch (SQLException e){
+            throw new ConexionException("Error al eliminar el cliente", e);
+        }
+
     }
 
     @Override

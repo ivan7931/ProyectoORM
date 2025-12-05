@@ -44,6 +44,16 @@ public class Producto implements Externalizable {
         idProducto = generadorID;
         this.idProveedor = idProveedor;
     }
+    public Producto(int idProducto,String nombre, double precio, categorias categoria,int cantidad, int idProveedor) {
+        this.idProducto = idProducto;
+        setNombre(nombre);
+        setPrecio(precio);
+        this.categoria = categoria;
+        this.cantidad=cantidad;
+        generadorID++;
+        idProducto = generadorID;
+        this.idProveedor = idProveedor;
+    }
     public Producto(String nombre, double precio, categorias categoria, int cantidad) {
         this(nombre,precio,categoria,cantidad,-1);
     }

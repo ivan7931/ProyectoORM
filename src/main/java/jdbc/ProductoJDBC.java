@@ -72,12 +72,53 @@ public class ProductoJDBC implements ProductoDAO {
 
     @Override
     public void actualizarProducto(Producto p) throws DataAccessException {
-
+        try(Connection conexion = ConexionBase.getConexion()){
+            String sql = "UPDATE gestion_tienda.producto SET nombre = ?, precio = ?, categoria = ?, cantidad = ?, id_proveedor = ? WHERE id_producto = ?;";
+            try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+                ps.setString(1, p.getNombre());
+                ps.setDouble(2, p.getPrecio());
+                ps.setString(3, String.valueOf(p.getCategoria()));
+                ps.setInt(4, p.getCantidad());
+                ps.setInt(5, p.getIdProveedor());
+                ps.setInt(6, p.getIdProducto());
+                int  filasAfectadas = ps.executeUpdate();
+                if (filasAfectadas == 0) {
+                    throw new DataNotFoundException("No existe el producto que se desea actualizar");
+                }
+            } catch (SQLException e) {
+                throw new QueryException("Error en la consulta", e);
+            }
+        } catch (SQLException e){
+            throw new QueryException("Error al conectar con la base de datos", e);
+        }
     }
 
     @Override
     public ArrayList<Producto> listar() throws DataAccessException {
-        return null;
+        try(Connection conexion = ConexionBase.getConexion()){
+            String sql = "SELECT id_producto,nombre, precio, categoria, cantidad, id_proveedor FROM gestion_tienda.producto;";
+            ArrayList<Producto> productos = new ArrayList<>();
+            try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    int  id_producto = rs.getInt("id_producto");
+                    String nombre = rs.getString("nombre");
+                    double precio = rs.getDouble("precio");
+                    String categoria = rs.getString("categoria");
+                    Producto.categorias categoria1 = Producto.categorias.valueOf(categoria);
+                    int cantidad = rs.getInt("cantidad");
+                    int id_proveedor = rs.getInt("id_proveedor");
+                    Producto producto = new Producto (nombre, precio, categoria1,cantidad, id_proveedor);
+                    producto.setIdProducto(id_producto);
+                    productos.add(producto);
+                }
+                return productos;
+            } catch (SQLException e) {
+                throw new QueryException("Error en la consulta", e);
+            }
+        } catch (SQLException e){
+            throw new ConexionException("Error al conectar con la base de datos", e);
+        }
     }
 
     @Override

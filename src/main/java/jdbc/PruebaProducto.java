@@ -13,7 +13,7 @@ public class PruebaProducto {
 
 
         ProductoJDBC productoJDBC = new ProductoJDBC();
-        productoJDBC.actualizarProducto(p);
+        //productoJDBC.actualizarProducto(p);
         //productoJDBC.agregarProducto(p);
         //productoJDBC.eliminarProducto(11);
         for (Producto producto: productoJDBC.listar()){

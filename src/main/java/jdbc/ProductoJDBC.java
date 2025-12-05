@@ -3,6 +3,7 @@ package jdbc;
 import Clases.Producto;
 import Excepciones.ConexionException;
 import Excepciones.DataAccessException;
+import Excepciones.DataNotFoundException;
 import Excepciones.QueryException;
 import Interfaces.ProductoDAO;
 
@@ -13,28 +14,28 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ProductoJDBC implements ProductoDAO {
-    private static final String URL = "jdbc:postgresql://localhost:5433/proyecto_DAO";
-    private static final String USER = "usuario_base";
-    private static final String PASSWORD = "usuario_base";
     @Override
     public void agregarProducto(Producto p) throws DataAccessException {
-        Connection conexion = ConexionBase.getConexion();
-        try {
-            PreparedStatement ps = conexion.prepareStatement("INSERT INTO gestion_tienda.producto (nombre, precio, categoria, cantidad, id_proveedor) VALUES (?, ?, ?, ?, ?);");
-            ps.setString(1, p.getNombre());
-            ps.setDouble(2, p.getPrecio());
-            ps.setString(3, String.valueOf(p.getCategoria()));
-            ps.setInt(4, p.getCantidad());
-            ps.setInt(5, p.getIdProducto());
-            ps.executeUpdate();
-            ps.close();
+        try(Connection conexion = ConexionBase.getConexion()) {
+            try {
+                PreparedStatement ps = conexion.prepareStatement("INSERT INTO gestion_tienda.producto (nombre, precio, categoria, cantidad, id_proveedor) VALUES (?, ?, ?, ?, ?);");
+                ps.setString(1, p.getNombre());
+                ps.setDouble(2, p.getPrecio());
+                ps.setString(3, String.valueOf(p.getCategoria()));
+                ps.setInt(4, p.getCantidad());
+                ps.setInt(5, p.getIdProducto());
+                ps.executeUpdate();
+                ps.close();
+            } catch (SQLException e) {
+                throw new QueryException("Error al agregar el cliente", e);
+            }
+            try {
+                conexion.close();
+            } catch (SQLException e) {
+                throw new ConexionException("Error al cerrar la conexion", e);
+            }
         } catch (SQLException e) {
-            throw new QueryException("Error al agregar el cliente", e);
-        }
-        try {
-            conexion.close();
-        } catch (SQLException e) {
-            throw new ConexionException("Error al cerrar la conexion", e);
+            throw new ConexionException("Error al conectar con la base de datos", e);
         }
     }
 
@@ -48,15 +49,15 @@ public class ProductoJDBC implements ProductoDAO {
                 int filasAfectadas = ps.executeUpdate();
 
                 if (filasAfectadas == 0) {
-                    throw new QueryException("No existe un producto con el ID especificado");
+                    throw new DataNotFoundException("No existe un producto con el ID especificado");
                 }
 
             } catch (SQLException e) {
-                throw new QueryException("Error al eliminar el producto", e);
+                throw new QueryException("Error en la consulta", e);
             }
         }
         catch (SQLException e){
-            throw new ConexionException("Error al eliminar el cliente", e);
+            throw new ConexionException("Error al conectar con la base de datos", e);
         }
 
     }

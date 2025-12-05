@@ -7,27 +7,35 @@ import Excepciones.DataNotFoundException;
 import Excepciones.QueryException;
 import Interfaces.ProductoDAO;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class ProductoJDBC implements ProductoDAO {
     @Override
     public void agregarProducto(Producto p) throws DataAccessException {
         try(Connection conexion = ConexionBase.getConexion()) {
+            try{
+                PreparedStatement pst = conexion.prepareStatement("select id_producto from gestion_tienda.producto order by id_producto desc limit 1;");
+                ResultSet rs = pst.executeQuery();
+                rs.next();
+                int id_producto = rs.getInt("id_producto");
+                p.setIdProducto(id_producto + 1);
+                rs.close();
+            } catch (SQLException e){
+                throw new QueryException("Error en la consulta", e);
+            }
             try {
-                PreparedStatement ps = conexion.prepareStatement("INSERT INTO gestion_tienda.producto (nombre, precio, categoria, cantidad, id_proveedor) VALUES (?, ?, ?, ?, ?);");
-                ps.setString(1, p.getNombre());
-                ps.setDouble(2, p.getPrecio());
-                ps.setString(3, String.valueOf(p.getCategoria()));
-                ps.setInt(4, p.getCantidad());
-                ps.setInt(5, p.getIdProducto());
+                PreparedStatement ps = conexion.prepareStatement("INSERT INTO gestion_tienda.producto (id_producto, nombre, precio, categoria, cantidad, id_proveedor) VALUES (?,?, ?, ?, ?, ?);");
+                ps.setInt(1, p.getIdProducto());
+                ps.setString(2, p.getNombre());
+                ps.setDouble(3, p.getPrecio());
+                ps.setString(4, String.valueOf(p.getCategoria()));
+                ps.setInt(5, p.getCantidad());
+                ps.setInt(6, p.getIdProveedor());
                 ps.executeUpdate();
                 ps.close();
             } catch (SQLException e) {
-                throw new QueryException("Error al agregar el cliente", e);
+                throw new QueryException("Error al agregar el producto", e);
             }
             try {
                 conexion.close();

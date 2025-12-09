@@ -9,4 +9,7 @@ public class DataReadException extends DataAccessException{
         super(cause);
     }
 
+    public DataReadException(String message) {
+        super(message);
+    }
 }

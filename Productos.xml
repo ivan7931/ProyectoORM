@@ -122,10 +122,138 @@
     </producto>
     <producto>
         <nombre>Chaqueta</nombre>
-        <precio>79.99</precio>
+        <precio>79.98999786376953</precio>
         <categoria>CATEGORIA5</categoria>
         <cantidad>20</cantidad>
         <id_producto>16</id_producto>
+        <id_proveedor>1</id_proveedor>
+    </producto>
+    <producto>
+        <nombre>Manzanas</nombre>
+        <precio>2.5</precio>
+        <categoria>CATEGORIA2</categoria>
+        <cantidad>100</cantidad>
+        <id_producto>17</id_producto>
+        <id_proveedor>1</id_proveedor>
+    </producto>
+    <producto>
+        <nombre>Laptop</nombre>
+        <precio>1200.5</precio>
+        <categoria>CATEGORIA1</categoria>
+        <cantidad>10</cantidad>
+        <id_producto>18</id_producto>
+        <id_proveedor>2</id_proveedor>
+    </producto>
+    <producto>
+        <nombre>Silla de oficina</nombre>
+        <precio>85.98999786376953</precio>
+        <categoria>CATEGORIA3</categoria>
+        <cantidad>20</cantidad>
+        <id_producto>19</id_producto>
+        <id_proveedor>3</id_proveedor>
+    </producto>
+    <producto>
+        <nombre>Camiseta</nombre>
+        <precio>15.5</precio>
+        <categoria>CATEGORIA5</categoria>
+        <cantidad>50</cantidad>
+        <id_producto>20</id_producto>
+        <id_proveedor>1</id_proveedor>
+    </producto>
+    <producto>
+        <nombre>Manzanas</nombre>
+        <precio>2.5</precio>
+        <categoria>CATEGORIA2</categoria>
+        <cantidad>100</cantidad>
+        <id_producto>21</id_producto>
+        <id_proveedor>1</id_proveedor>
+    </producto>
+    <producto>
+        <nombre>Auriculares</nombre>
+        <precio>59.900001525878906</precio>
+        <categoria>CATEGORIA4</categoria>
+        <cantidad>30</cantidad>
+        <id_producto>22</id_producto>
+        <id_proveedor>2</id_proveedor>
+    </producto>
+    <producto>
+        <nombre>Smartphone</nombre>
+        <precio>899.989990234375</precio>
+        <categoria>CATEGORIA1</categoria>
+        <cantidad>25</cantidad>
+        <id_producto>23</id_producto>
+        <id_proveedor>2</id_proveedor>
+    </producto>
+    <producto>
+        <nombre>Tablet</nombre>
+        <precio>499.5</precio>
+        <categoria>CATEGORIA1</categoria>
+        <cantidad>15</cantidad>
+        <id_producto>24</id_producto>
+        <id_proveedor>2</id_proveedor>
+    </producto>
+    <producto>
+        <nombre>Peras</nombre>
+        <precio>3.0999999046325684</precio>
+        <categoria>CATEGORIA2</categoria>
+        <cantidad>80</cantidad>
+        <id_producto>25</id_producto>
+        <id_proveedor>1</id_proveedor>
+    </producto>
+    <producto>
+        <nombre>Plátanos</nombre>
+        <precio>2.200000047683716</precio>
+        <categoria>CATEGORIA2</categoria>
+        <cantidad>120</cantidad>
+        <id_producto>26</id_producto>
+        <id_proveedor>1</id_proveedor>
+    </producto>
+    <producto>
+        <nombre>Mesa de comedor</nombre>
+        <precio>250.0</precio>
+        <categoria>CATEGORIA3</categoria>
+        <cantidad>8</cantidad>
+        <id_producto>27</id_producto>
+        <id_proveedor>3</id_proveedor>
+    </producto>
+    <producto>
+        <nombre>Estantería</nombre>
+        <precio>120.75</precio>
+        <categoria>CATEGORIA3</categoria>
+        <cantidad>12</cantidad>
+        <id_producto>28</id_producto>
+        <id_proveedor>3</id_proveedor>
+    </producto>
+    <producto>
+        <nombre>Teclado inalámbrico</nombre>
+        <precio>45.9900016784668</precio>
+        <categoria>CATEGORIA4</categoria>
+        <cantidad>25</cantidad>
+        <id_producto>29</id_producto>
+        <id_proveedor>2</id_proveedor>
+    </producto>
+    <producto>
+        <nombre>Ratón ergonómico</nombre>
+        <precio>35.5</precio>
+        <categoria>CATEGORIA4</categoria>
+        <cantidad>40</cantidad>
+        <id_producto>30</id_producto>
+        <id_proveedor>2</id_proveedor>
+    </producto>
+    <producto>
+        <nombre>Pantalones</nombre>
+        <precio>29.899999618530273</precio>
+        <categoria>CATEGORIA5</categoria>
+        <cantidad>60</cantidad>
+        <id_producto>31</id_producto>
+        <id_proveedor>1</id_proveedor>
+    </producto>
+    <producto>
+        <nombre>Chaqueta</nombre>
+        <precio>79.99</precio>
+        <categoria>CATEGORIA5</categoria>
+        <cantidad>20</cantidad>
+        <id_producto>32</id_producto>
         <id_proveedor>1</id_proveedor>
     </producto>
 </productos>

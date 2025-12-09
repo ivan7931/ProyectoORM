@@ -19,6 +19,12 @@ public class Proveedor implements Externalizable {
         setIdProveedor(generadorID);
     }
 
+    public Proveedor(int idProveedor,  String nombre, String empresa) {
+        this.idProveedor = idProveedor;
+        this.nombre = nombre;
+        this.empresa = empresa;
+    }
+
     public Proveedor() {}
 
     @Override

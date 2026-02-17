@@ -6,6 +6,7 @@ import Excepciones.DataNotFoundException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 /***
  *
@@ -37,7 +38,7 @@ public interface ClienteDAO {
      * @return ArrayList con los registros del fichero
      * @throws DataAccessException si ha habido algún error al acceder al fichero
      */
-    ArrayList<Cliente> listarClientes() throws DataAccessException;
+    List<Cliente> listarClientes() throws DataAccessException;
 
     /***
      * Busca un registro concreto en el fichero
@@ -60,5 +61,5 @@ public interface ClienteDAO {
      * @return una lista con los clientes que tienen el mismo nombre
      * @throws DataAccessException si ha habido algún error al acceder al fihcero
      */
-    ArrayList<Cliente> buscarPorNombre(String nombre) throws DataAccessException;
+    List<Cliente> buscarPorNombre(String nombre) throws DataAccessException;
 }

@@ -4,6 +4,7 @@ import Excepciones.DataAccessException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public interface ProveedorDAO {
 
@@ -33,7 +34,7 @@ public interface ProveedorDAO {
      * @return ArrayList con los registros del fichero
      * @throws DataAccessException si ha habido algún error al acceder al fichero
      */
-    ArrayList<Proveedor> listarProveedores() throws DataAccessException;
+    List<Proveedor> listarProveedores() throws DataAccessException;
 
     /***
      * Busca un registro concreto en el fichero
@@ -56,5 +57,5 @@ public interface ProveedorDAO {
      * @return una lista con los productos agrupados por el mismo id_proveedor
      * @throws DataAccessException si ha habido algún error al acceder al fichero
      */
-    ArrayList<Producto> productosSuministrados(int idProveedor) throws DataAccessException;
+    List<Producto> productosSuministrados(int idProveedor) throws DataAccessException;
 }

@@ -8,6 +8,7 @@ import Excepciones.DataWriteException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public interface ProductoDAO {
 
@@ -37,7 +38,7 @@ public interface ProductoDAO {
      * @return ArrayList con los registros del fichero
      * @throws DataAccessException si ha habido algún error al acceder al fichero
      */
-    ArrayList<Producto> listar() throws DataAccessException;
+    List<Producto> listar() throws DataAccessException;
 
     /***
      * Busca un registro concreto en el fichero
@@ -60,7 +61,7 @@ public interface ProductoDAO {
      * @return un ArrayList con los productos agrupados por la misma categoría
      * @throws DataAccessException si ha habido algún error al acceder al fichero
      */
-    ArrayList<Producto> listarPorCategoria(String categoria) throws DataAccessException;
+    List<Producto> listarPorCategoria(String categoria) throws DataAccessException;
 
 
 }

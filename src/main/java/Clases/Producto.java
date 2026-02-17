@@ -1,59 +1,47 @@
 package Clases;
 
-import java.io.*;
+import jakarta.persistence.*;
 
-public class Producto implements Externalizable {
+
+@Entity
+@Table (name = "Producto")
+public class Producto{
 
     public enum categorias{CATEGORIA1, CATEGORIA2, CATEGORIA3,CATEGORIA4,CATEGORIA5}
-    private String nombre;
-    private double precio;
-    private categorias categoria;
-    private int cantidad;
-    private static int generadorID=0;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column (name = "id_producto", nullable = false, unique = true)
     private int idProducto;
-    private int idProveedor;
 
-    @Override
-    public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(nombre);
-        out.writeDouble(precio);
-        out.writeObject(categoria.name());
-        out.writeInt(cantidad);
-        out.writeInt(idProducto);
-        out.writeInt(idProveedor);
-    }
+    @Column (name = "nombre", nullable = false, length = 50)
+    private String nombre;
 
-    @Override
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        nombre = (String)in.readObject();
-        precio = in.readDouble();
-        categoria = categorias.valueOf((String) in.readObject());
-        cantidad = in.readInt();
-        idProducto = in.readInt();
-        idProveedor = in.readInt();
-    }
+    @Column (name = "precio", nullable = false)
+    private double precio;
+
+    @Enumerated(EnumType.STRING)
+    @Column (name = "categoria", nullable = false, length = 20)
+    private categorias categoria;
+
+    @Column (name = "cantegoria", nullable = false)
+    private int cantidad;
+
+    @ManyToOne
+    @JoinColumn(name = "id_proveedor", nullable = false)
+    private Proveedor proveedor;
+
     public Producto() {
 
     }
-    public Producto(String nombre, double precio, categorias categoria,int cantidad, int idProveedor) {
+    public Producto(String nombre, double precio, categorias categoria,int cantidad, Proveedor proveedor) {
         setNombre(nombre);
         setPrecio(precio);
         this.categoria = categoria;
         this.cantidad=cantidad;
-        generadorID++;
-        idProducto = generadorID;
-        this.idProveedor = idProveedor;
-    }
-    public Producto(int idProducto,String nombre, double precio, categorias categoria,int cantidad, int idProveedor) {
-        this.idProducto = idProducto;
-        setNombre(nombre);
-        setPrecio(precio);
-        this.categoria = categoria;
-        this.cantidad=cantidad;
-        this.idProveedor = idProveedor;
+        this.proveedor = proveedor;
     }
     public Producto(String nombre, double precio, categorias categoria, int cantidad) {
-        this(nombre,precio,categoria,cantidad,-1);
+        this(nombre,precio,categoria,cantidad,null);
     }
 
     public double getPrecio() {
@@ -103,22 +91,13 @@ public class Producto implements Externalizable {
         return idProducto;
     }
 
-    public void setIdProducto(int idProducto) {
-        if(idProducto<=0){
-            throw new IllegalArgumentException();
-        }
-        this.idProducto = idProducto;
+
+    public Proveedor getProveedor() {
+        return proveedor;
     }
 
-    public int getIdProveedor() {
-        return idProveedor;
-    }
-
-    public void setIdProveedor(int idProveedor) {
-        if(idProveedor<=0){
-            throw new IllegalArgumentException();
-        }
-        this.idProveedor = idProveedor;
+    public void setProveedor(Proveedor proveedor) {
+        this.proveedor = proveedor;
     }
 
     @Override
@@ -129,7 +108,6 @@ public class Producto implements Externalizable {
                 ", categoria=" + categoria +
                 ",cantidad=" + cantidad +
                 ",idProducto=" + idProducto +
-                ", idProveedor=" + idProveedor +
                 '}';
     }
 }

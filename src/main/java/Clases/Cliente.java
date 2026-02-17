@@ -1,37 +1,30 @@
 package Clases;
 
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
+import jakarta.persistence.*;
 
-public class Cliente implements Externalizable{
-    private String nombre;
-    private String apellido;
+@Entity
+@Table(name = "Cliente")
+public class Cliente{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column (name = "id", nullable = false,unique = true)
     private int id;
-    private static int generadorID=0;
-    @Override
-    public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(nombre);
-        out.writeObject(apellido);
-        out.writeInt(id);
-    }
 
-    @Override
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        nombre = (String) in.readObject();
-        apellido = (String) in.readObject();
-        id = in.readInt();
-    }
-    public Cliente(String nombre, String apellido) {
-        setNombre(nombre);
-        setApellido(apellido);
-        generadorID++;
-        setId(generadorID);
-    }
+    @Column (name = "nombre", nullable = false, length = 50)
+    private String nombre;
+
+    @Column (name = "apellido", nullable = false, length = 50)
+    private String apellido;
+
     public Cliente(){
 
     }
+
+    public Cliente(String nombre, String apellido) {
+        setNombre(nombre);
+        setApellido(apellido);
+    }
+
 
     public String getNombre() {
         return nombre;
@@ -57,13 +50,6 @@ public class Cliente implements Externalizable{
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        if(id <=0){
-            throw new IllegalArgumentException();
-        }
-        this.id = id;
     }
 
     @Override

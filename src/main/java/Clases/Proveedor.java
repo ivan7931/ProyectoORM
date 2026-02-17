@@ -1,22 +1,26 @@
 package Clases;
 
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
+import jakarta.persistence.*;
 
-public class Proveedor implements Externalizable {
 
-    private String nombre;
-    private String empresa;
-    private static int generadorID=0;
+@Entity
+@Table (name = "Proveedor")
+public class Proveedor {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column (name = "id_proveedor", nullable = false, unique = true)
     private int idProveedor;
+
+    @Column (name = "nombre", nullable = false, length = 50)
+    private String nombre;
+
+    @Column (name = "empresa", nullable = false, length = 50)
+    private String empresa;
+
 
     public Proveedor(String nombre, String empresa) {
         setNombre(nombre);
         setEmpresa(empresa);
-        generadorID++;
-        setIdProveedor(generadorID);
     }
 
     public Proveedor(int idProveedor,  String nombre, String empresa) {
@@ -27,19 +31,6 @@ public class Proveedor implements Externalizable {
 
     public Proveedor() {}
 
-    @Override
-    public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(nombre);
-        out.writeObject(empresa);
-        out.writeInt(idProveedor);
-    }
-
-    @Override
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        nombre = (String) in.readObject();
-        empresa = (String) in.readObject();
-        idProveedor = in.readInt();
-    }
 
     public String getNombre() {
         return nombre;
@@ -64,12 +55,6 @@ public class Proveedor implements Externalizable {
     }
     public int getIdProveedor() {
         return idProveedor;
-    }
-    public  void setIdProveedor(int idProveedor) {
-        if(idProveedor<=0){
-            throw new IllegalArgumentException();
-        }
-        this.idProveedor = idProveedor;
     }
     @Override
     public String toString() {

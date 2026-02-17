@@ -13,7 +13,7 @@ public class PruebaProducto {
         //p1.setIdProducto(11);
 
 
-        ProductoJDBC productoJDBC = new ProductoJDBC();
+        ProductoHibernate productoJDBC = new ProductoHibernate();
         //productoJDBC.actualizarProducto(p);
         //productoJDBC.agregarProducto(p);
         //productoJDBC.eliminarProducto(11);
@@ -46,7 +46,7 @@ public class PruebaProducto {
         }*/
 
         Proveedor prov = new Proveedor(7,"Paco","PacoSL");
-        ProveedorJDBC proveedorJDBC = new ProveedorJDBC();
+        ProveedorHibernate proveedorJDBC = new ProveedorHibernate();
         proveedorJDBC.agregarProveedor(prov);
         //proveedorJDBC.eliminarProveedor(7);
         //proveedorJDBC.actualizarProveedor(prov);

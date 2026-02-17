@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class MainJDBC {
     public static void main(String[] args) throws DataAccessException {
         Cliente c1 = new Cliente("prueba1","prueba1");
-        ClienteJDBC cJDBC = new ClienteJDBC();
+        ClienteHibernate cJDBC = new ClienteHibernate();
         /*ArrayList<Cliente> listaClientes = cJDBC.listarClientes();
         for(Cliente c:listaClientes){
             System.out.println(c);

@@ -2,9 +2,11 @@ package Clases;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+
 
 @Entity
-@Table (name = "Producto")
+@Table (name = "producto")
 public class Producto{
 
     public enum categorias{CATEGORIA1, CATEGORIA2, CATEGORIA3,CATEGORIA4,CATEGORIA5}
@@ -23,26 +25,36 @@ public class Producto{
     @Column (name = "categoria", nullable = false, length = 20)
     private categorias categoria;
 
-    @Column (name = "cantegoria", nullable = false)
+    @Column (name = "cantidad", nullable = false)
     private int cantidad;
 
-    @ManyToOne
+    @Column(name = "fecha_alta", nullable = false)
+    private LocalDate fechaAlta;
+
+    @Column(name = "descuento")
+    private Double descuento;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_proveedor", nullable = false)
     private Proveedor proveedor;
 
     public Producto() {
 
     }
-    public Producto(String nombre, double precio, categorias categoria,int cantidad, Proveedor proveedor) {
+    public Producto(String nombre, double precio, categorias categoria,int cantidad, Proveedor proveedor, Double descuento) {
         setNombre(nombre);
         setPrecio(precio);
         this.categoria = categoria;
         this.cantidad=cantidad;
         this.proveedor = proveedor;
+        this.fechaAlta = LocalDate.now();
+        this.descuento = (descuento != null) ? descuento : 0.0;
     }
-    public Producto(String nombre, double precio, categorias categoria, int cantidad) {
-        this(nombre,precio,categoria,cantidad,null);
+    public Producto(String nombre, double precio, categorias categoria,
+                    int cantidad, Proveedor proveedor) {
+        this(nombre, precio, categoria, cantidad, proveedor, 0.0);
     }
+
 
     public double getPrecio() {
         return precio;
@@ -60,7 +72,7 @@ public class Producto{
     }
 
     public void setNombre(String nombre) {
-        if(nombre.isEmpty()){
+        if(nombre == null || nombre.isBlank()){
             throw new IllegalArgumentException();
         }
         this.nombre = nombre;
@@ -99,6 +111,27 @@ public class Producto{
     public void setProveedor(Proveedor proveedor) {
         this.proveedor = proveedor;
     }
+
+    public LocalDate getFechaAlta() {
+        return fechaAlta;
+    }
+
+    public void setFechaAlta(LocalDate fechaAlta) {
+        this.fechaAlta = fechaAlta;
+    }
+
+    public Double getDescuento() {
+        return descuento;
+    }
+
+    public double getPrecioFinal() {
+        return precio * (1 - descuento / 100);
+    }
+
+    public double getValorInventario() {
+        return getPrecioFinal() * cantidad;
+    }
+
 
     @Override
     public String toString() {

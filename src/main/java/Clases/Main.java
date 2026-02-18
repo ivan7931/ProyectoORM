@@ -1,199 +1,205 @@
 package Clases;
 
-import DAOFile.ClienteDAOImpl_XML;
-import DAOFile.ProductoDAOImpl_XML;
-import DAOFile.ProveedorDAOImpl_XML;
 import Excepciones.DataAccessException;
-import JSONFile.ClienteDAOImpl_JSON;
-import JSONFile.ProductoDAOImpl_JSON;
-import JSONFile.ProveedorDAOImpl_JSON;
+import jdbc.ClienteHibernate;
+import jdbc.ProductoHibernate;
+import jdbc.ProveedorHibernate;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args)throws DataAccessException {
-        Producto p1 = new Producto("Manzanas", 2.50, Producto.categorias.CATEGORIA2, 100, 1);
-        Producto p2 = new Producto("Laptop", 1200.50, Producto.categorias.CATEGORIA1, 10, 2);
-        Producto p3 = new Producto("Silla de oficina", 85.99, Producto.categorias.CATEGORIA3, 20, 3);
-        Producto p4 = new Producto("Camiseta", 15.50, Producto.categorias.CATEGORIA5, 50, 1);
-        Producto p5 = new Producto("Manzanas", 2.50, Producto.categorias.CATEGORIA2, 100, 1);
-        Producto p6 = new Producto("Auriculares", 59.90, Producto.categorias.CATEGORIA4, 30, 2);
-        Producto p7 = new Producto("Smartphone", 899.99, Producto.categorias.CATEGORIA1, 25, 2);
-        Producto p8 = new Producto("Tablet", 499.50, Producto.categorias.CATEGORIA1, 15, 2);
-        Producto p9 = new Producto("Peras", 3.10, Producto.categorias.CATEGORIA2, 80, 1);
-        Producto p10 = new Producto("Plátanos", 2.20, Producto.categorias.CATEGORIA2, 120, 1);
-        Producto p11 = new Producto("Mesa de comedor", 250.00, Producto.categorias.CATEGORIA3, 8, 3);
-        Producto p12 = new Producto("Estantería", 120.75, Producto.categorias.CATEGORIA3, 12, 3);
-        Producto p13 = new Producto("Teclado inalámbrico", 45.99, Producto.categorias.CATEGORIA4, 25, 2);
-        Producto p14 = new Producto("Ratón ergonómico", 35.50, Producto.categorias.CATEGORIA4, 40, 2);
-        Producto p15 = new Producto("Pantalones", 29.90, Producto.categorias.CATEGORIA5, 60, 1);
-        Producto p16 = new Producto("Chaqueta", 79.99, Producto.categorias.CATEGORIA5, 20, 1);
 
-        ProductoDAOImpl_JSON productoDAO = new ProductoDAOImpl_JSON();
-        productoDAO.agregarProducto(p1);
-        productoDAO.agregarProducto(p2);
-        productoDAO.agregarProducto(p3);
-        productoDAO.agregarProducto(p4);
-        productoDAO.agregarProducto(p5);
-        productoDAO.agregarProducto(p6);
-        productoDAO.agregarProducto(p7);
-        productoDAO.agregarProducto(p8);
-        productoDAO.agregarProducto(p9);
-        productoDAO.agregarProducto(p10);
-        productoDAO.agregarProducto(p11);
-        productoDAO.agregarProducto(p12);
-        productoDAO.agregarProducto(p13);
-        productoDAO.agregarProducto(p14);
-        productoDAO.agregarProducto(p15);
-        productoDAO.agregarProducto(p16);
-        System.out.println(productoDAO.calcularValorInventario());
-        //productoDAO.eliminarProducto(6);
-        System.out.println(productoDAO.buscarPorId(4));
-        System.out.println(productoDAO.buscarPorId(6));
-        System.out.println(productoDAO.calcularValorInventario());
-        ArrayList<Producto> listaprod;
-        productoDAO.listar();
-        listaprod = productoDAO.listarPorCategoria("categoria2");
-        for(Producto p : listaprod){
-            System.out.println(p);
-        }
-        ArrayList<Producto> lista1;
-        ProductoDAOImpl_XML prodDAO = new ProductoDAOImpl_XML();
-        prodDAO.agregarProducto(p1);
-        prodDAO.agregarProducto(p2);
-        prodDAO.agregarProducto(p3);
-        prodDAO.agregarProducto(p4);
-        prodDAO.agregarProducto(p5);
-        prodDAO.agregarProducto(p6);
-        prodDAO.agregarProducto(p7);
-        prodDAO.agregarProducto(p8);
-        prodDAO.agregarProducto(p9);
-        prodDAO.agregarProducto(p10);
-        prodDAO.agregarProducto(p11);
-        prodDAO.agregarProducto(p12);
-        prodDAO.agregarProducto(p13);
-        prodDAO.agregarProducto(p14);
-        prodDAO.agregarProducto(p15);
-        prodDAO.agregarProducto(p16);
-        lista1 =prodDAO.listar();
-        for(Producto p : lista1){
-            System.out.println(p.toString());
-        }
-        System.out.println(prodDAO.buscarPorId(7));
-        System.out.println(prodDAO.calcularValorInventario());
-        ArrayList<Producto> porCategoria;
-        porCategoria = prodDAO.listarPorCategoria("CATEGORIA3");
-        for (Producto p : porCategoria) {
-            System.out.println(p.toString());
-        }
-        Cliente c1 = new Cliente("Ana", "Gómez");
-        Cliente c2 = new Cliente("Luis", "Pérez");
-        Cliente c3 = new Cliente("María", "Rodríguez");
-        Cliente c4 = new Cliente("Carlos", "Sánchez");
-        Cliente c5 = new Cliente("Laura", "Fernández");
-        Cliente c6 = new Cliente("Javier", "Martínez");
-        Cliente c7 = new Cliente("Sofía", "López");
-        Cliente c8 = new Cliente("Miguel", "Hernández");
-        Cliente c9 = new Cliente("Elena", "García");
-        Cliente c10 = new Cliente("Diego", "Ramírez");
-        Cliente c11 = new Cliente("Valeria", "Torres");
-        Cliente c12 = new Cliente("Andrés", "Vega");
-        //CLIENTES TO JSON
-        ClienteDAOImpl_JSON clienteJSON = new ClienteDAOImpl_JSON();
-        ArrayList<Cliente> listaJSON;
-        clienteJSON.listarClientes();
-        clienteJSON.listarClientes();
-        System.out.println(clienteJSON.contarClientes());
-        clienteJSON.agregarCliente(c1);
-        clienteJSON.agregarCliente(c2);
-        clienteJSON.agregarCliente(c3);
-        clienteJSON.agregarCliente(c4);
-        clienteJSON.agregarCliente(c5);
-        clienteJSON.agregarCliente(c6);
-        clienteJSON.agregarCliente(c7);
-        clienteJSON.agregarCliente(c8);
-        clienteJSON.agregarCliente(c9);
-        clienteJSON.agregarCliente(c10);
-        clienteJSON.agregarCliente(c11);
-        clienteJSON.agregarCliente(c12);
-        //clienteJSON.eliminarCliente(5);
-        listaJSON= clienteJSON.listarClientes();
-        for(Cliente c : listaJSON) {
-            System.out.println(c);
-        }
-        ClienteDAOImpl_XML clienteDAO = new ClienteDAOImpl_XML();
-        //clienteDAO.eliminarCliente(3);
-        //clienteDAO.eliminarCliente(4);
-        ArrayList<Cliente> listaClientes;
-        clienteDAO.agregarCliente(c1);
-        clienteDAO.agregarCliente(c2);
-        clienteDAO.agregarCliente(c3);
-        clienteDAO.agregarCliente(c4);
-        clienteDAO.agregarCliente(c5);
-        clienteDAO.agregarCliente(c6);
-        clienteDAO.agregarCliente(c7);
-        clienteDAO.agregarCliente(c8);
-        clienteDAO.agregarCliente(c9);
-        clienteDAO.agregarCliente(c10);
-        clienteDAO.agregarCliente(c11);
-        clienteDAO.agregarCliente(c12);
-        //clienteDAO.eliminarCliente(12);
-        listaClientes=clienteDAO.listarClientes();
-        for(Cliente c : listaClientes) {
-            System.out.println(c);
-        }
-        Proveedor prov1 = new Proveedor("Juan Pérez", "Frutas y Verduras S.A.");
-        Proveedor prov2 = new Proveedor("Laura Gómez", "Electrónica Global");
-        Proveedor prov3 = new Proveedor("Carlos Ramírez", "Muebles y Hogar S.L.");
-        Proveedor prov4 = new Proveedor("Ana Torres", "Ropa y Moda S.A.");
-        Proveedor prov5 = new Proveedor("Miguel Sánchez", "Tecnología Avanzada");
-        Proveedor prov6 = new Proveedor("Lucía Fernández", "Alimentos Naturales");
-        ArrayList<Proveedor> listaProveedor;
-        ProveedorDAOImpl_JSON proveedorJSON = new ProveedorDAOImpl_JSON();
-        proveedorJSON.agregarProveedor(prov1);
-        proveedorJSON.agregarProveedor(prov2);
-        proveedorJSON.agregarProveedor(prov3);
-        proveedorJSON.agregarProveedor(prov4);
-        proveedorJSON.agregarProveedor(prov5);
-        proveedorJSON.agregarProveedor(prov6);
-        //proveedorJSON.eliminarProveedor(4);
-        System.out.println(proveedorJSON.contarProveedores());
-        System.out.println(proveedorJSON.buscarPorId(3));
-        System.out.println(proveedorJSON.buscarPorId(4));
-        listaProveedor= proveedorJSON.listarProveedores();
-        for(Proveedor p :  listaProveedor){
-            System.out.println(p);
-        }
-        ProveedorDAOImpl_XML proveedorDAO = new ProveedorDAOImpl_XML();
-        proveedorDAO.agregarProveedor(prov1);
-        proveedorDAO.agregarProveedor(prov2);
-        proveedorDAO.agregarProveedor(prov3);
-        proveedorDAO.agregarProveedor(prov4);
-        proveedorDAO.agregarProveedor(prov5);
-        proveedorDAO.agregarProveedor(prov6);
-        listaProveedor=proveedorDAO.listarProveedores();
-        for(Proveedor p : listaProveedor) {
-            System.out.println(p.toString());
-        }
+        ClienteHibernate clienteDAO = new ClienteHibernate();
+        ProveedorHibernate proveedorDAO = new ProveedorHibernate();
+        ProductoHibernate productoDAO = new ProductoHibernate();
+        /*
+        try {
+            System.out.println("=== PRUEBAS DE PROVEEDORES ===");
+            // Agregar proveedores
+            Proveedor p1 = new Proveedor("Proveedor1", "EmpresaA");
+            Proveedor p2 = new Proveedor("Proveedor2", "EmpresaB");
+            proveedorDAO.agregarProveedor(p1);
+            proveedorDAO.agregarProveedor(p2);
 
-        //ERROR
-           // nombre nulo
-        /*Cliente c24 = new Cliente("Ana", "NUEVO cliente");       // apellido nulo
-        ClienteDAOImpl_JSON cJSON = new ClienteDAOImpl_JSON();
-        cJSON.agregarCliente(c24);*/
-        //Producto p26 = new Producto("Mouse", 25.0, Producto.categorias.CATEGORIA1, 10, 2);   // precio negativo
-        /*Producto p2 = new Producto("Teclado", 40.0, Producto.categorias.CATEGORIA3, -5, 1);  // cantidad negativa
-        Producto p3 = new Producto("", 100.0, Producto.categorias.CATEGORIA2, 1, 1);         // nombre vacío
-        Producto p4 = new Producto("Laptop", 1200.0, null, 2, 1);                             // categoría nula*/
-        //ProductoDAOImpl_JSON prodJSON = new ProductoDAOImpl_JSON();
-        //prodJSON.agregarProducto(p1);
+            // Listar proveedores
+            List<Proveedor> listaProv = proveedorDAO.listarProveedores();
+            System.out.println("Lista de proveedores: " + listaProv);
 
-        /*Proveedor pr1 = new Proveedor("aaa", "123456789");          // nombre vacío
-        ProveedorDAOImpl_JSON pJSON = new ProveedorDAOImpl_JSON();
-        pJSON.agregarProveedor(pr1);
-        Proveedor pr2 = new Proveedor("TecnoSur", "123456789"); // email inválido
-        Proveedor pr3 = new Proveedor("MegaPC", "abcde");   // teléfono inválido
-        Proveedor pr4 = new Proveedor("SoftWareX", "");          // teléfono vacío*/
+            // Buscar proveedor por ID
+            Proveedor buscado = proveedorDAO.buscarPorId(p1.getIdProveedor());
+            System.out.println("Proveedor buscado por ID: " + buscado);
+
+            // Contar proveedores
+            int totalProv = proveedorDAO.contarProveedores();
+            System.out.println("Total de proveedores: " + totalProv);
+
+            // Actualizar proveedor
+            p1.setEmpresa("EmpresaA_Modificada");
+            proveedorDAO.actualizarProveedor(p1);
+            System.out.println("Proveedor actualizado: " + proveedorDAO.buscarPorId(p1.getIdProveedor()));
+
+            // === PRUEBAS DE CLIENTES ===
+            Cliente c1 = new Cliente("Ana", "Perez");
+            Cliente c2 = new Cliente("Juan", "Gomez");
+            clienteDAO.agregarCliente(c1);
+            clienteDAO.agregarCliente(c2);
+
+            // Listar clientes
+            List<Cliente> listaClientes = clienteDAO.listarClientes();
+            System.out.println("Lista de clientes: " + listaClientes);
+
+            // Buscar por ID
+            Cliente clienteBuscado = clienteDAO.buscarPorId(c1.getIdCliente());
+            System.out.println("Cliente buscado: " + clienteBuscado);
+
+            // Contar clientes
+            System.out.println("Total de clientes: " + clienteDAO.contarClientes());
+
+            // Buscar por nombre
+            List<Cliente> clientesNombre = clienteDAO.buscarPorNombre("Ana");
+            System.out.println("Clientes con nombre Ana: " + clientesNombre);
+
+            // Actualizar cliente
+            c1.setApellido("Perez-Modificado");
+            clienteDAO.actualizarCliente(c1);
+            System.out.println("Cliente actualizado: " + clienteDAO.buscarPorId(c1.getIdCliente()));
+
+            // === PRUEBAS DE PRODUCTOS ===
+            Producto prod1 = new Producto("Camiseta", 20.5, Producto.categorias.CATEGORIA1, 10, p1);
+            Producto prod2 = new Producto("Pantalón", 35.0, Producto.categorias.CATEGORIA2, 5, p2);
+            productoDAO.agregarProducto(prod1);
+            productoDAO.agregarProducto(prod2);
+
+            // Listar productos
+            List<Producto> listaProd = productoDAO.listar();
+            System.out.println("Lista de productos: " + listaProd);
+
+            // Buscar por ID
+            Producto productoBuscado = productoDAO.buscarPorId(prod1.getIdProducto());
+            System.out.println("Producto buscado: " + productoBuscado);
+
+            // Calcular valor de inventario
+            double valorInventario = productoDAO.calcularValorInventario();
+            System.out.println("Valor total inventario: " + valorInventario);
+
+            // Listar productos por categoría
+            List<Producto> prodCat = productoDAO.listarPorCategoria("CATEGORIA1");
+            System.out.println("Productos categoría CATEGORIA1: " + prodCat);
+
+            // Actualizar producto
+            prod1.setPrecio(22.0);
+            productoDAO.actualizarProducto(prod1);
+            System.out.println("Producto actualizado: " + productoDAO.buscarPorId(prod1.getIdProducto()));
+
+            // Productos suministrados por un proveedor
+            List<Producto> productosProv = proveedorDAO.productosSuministrados(p1.getIdProveedor());
+            System.out.println("Productos suministrados por " + p1.getNombre() + ": " + productosProv);
+
+            // === ELIMINACIONES ===
+            productoDAO.eliminarProducto(prod2.getIdProducto());
+            clienteDAO.eliminarCliente(c2.getIdCliente());
+            proveedorDAO.eliminarProveedor(p2.getIdProveedor());
+
+            System.out.println("Después de eliminar:");
+            System.out.println("Clientes: " + clienteDAO.listarClientes());
+            System.out.println("Proveedores: " + proveedorDAO.listarProveedores());
+            System.out.println("Productos: " + productoDAO.listar());
+
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
+        */
+        try {
+
+            System.out.println("===== INSERTANDO PROVEEDORES =====");
+
+            Proveedor pr1 = new Proveedor("ProveedorA", "EmpresaA");
+            Proveedor pr2 = new Proveedor("ProveedorB", "EmpresaB");
+
+            proveedorDAO.agregarProveedor(pr1);
+            proveedorDAO.agregarProveedor(pr2);
+
+            System.out.println("Proveedores insertados correctamente\n");
 
 
+            System.out.println("===== INSERTANDO PRODUCTOS =====");
+
+            // Producto sin descuento (hoy)
+            Producto p1 = new Producto(
+                    "ProductoNormal",
+                    100,
+                    Producto.categorias.CATEGORIA1,
+                    10,
+                    pr1,
+                    0.0
+            );
+
+            // Producto con 10% descuento (hoy)
+            Producto p2 = new Producto(
+                    "ProductoDescuento10",
+                    200,
+                    Producto.categorias.CATEGORIA2,
+                    5,
+                    pr1,
+                    10.0
+            );
+
+            // Producto con 20% descuento (fecha antigua)
+            Producto p3 = new Producto(
+                    "ProductoAntiguo",
+                    150,
+                    Producto.categorias.CATEGORIA3,
+                    8,
+                    pr2,
+                    20.0
+            );
+
+            // Forzamos fecha antigua manualmente
+            p3.setFechaAlta(LocalDate.now().minusDays(15));
+
+            productoDAO.agregarProducto(p1);
+            productoDAO.agregarProducto(p2);
+            productoDAO.agregarProducto(p3);
+
+            System.out.println("Productos insertados correctamente\n");
+
+
+            System.out.println("===== PRODUCTOS CON PRECIO FINAL =====");
+            List<Producto> todos = productoDAO.listar();
+
+            for (Producto p : todos) {
+                System.out.println(
+                        p.getNombre() +
+                                " | Precio base: " + p.getPrecio() +
+                                " | Descuento: " + p.getDescuento() + "%" +
+                                " | Precio final: " + p.getPrecioFinal()
+                );
+            }
+
+
+            System.out.println("\n===== PRODUCTOS ÚLTIMOS 7 DÍAS =====");
+
+            List<Producto> recientes = productoDAO.productosUltimosDias(7);
+
+            for (Producto p : recientes) {
+                System.out.println(p.getNombre() +
+                        " | Fecha alta: " + p.getFechaAlta());
+            }
+
+
+            System.out.println("\n===== PROVEEDOR CON MAYOR FACTURACIÓN =====");
+
+            Proveedor top = proveedorDAO.proveedorMayorFacturacion();
+
+            System.out.println("Proveedor con mayor facturación: "
+                    + top.getNombre() +
+                    " (" + top.getEmpresa() + ")");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

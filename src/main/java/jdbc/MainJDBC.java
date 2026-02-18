@@ -16,10 +16,10 @@ public class MainJDBC {
         Cliente cBuscado = cJDBC.buscarPorId(2);
         System.out.println(cBuscado);
         System.out.println(cJDBC.contarClientes());
-        ArrayList<Cliente> listaMismoNombre = cJDBC.buscarPorNombre("ejemplo");
+        /*ArrayList<Cliente> listaMismoNombre = cJDBC.buscarPorNombre("ejemplo");
         for (Cliente c : listaMismoNombre) {
             System.out.println(c);
         }
-
+*/
     }
 }

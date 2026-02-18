@@ -1,9 +1,7 @@
 package Interfaces;
 
 import Clases.*;
-import Excepciones.DataAccessException;
-import Excepciones.DataNotFoundException;
-import Excepciones.DataWriteException;
+import Excepciones.*;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -15,53 +13,62 @@ public interface ProductoDAO {
     /***
      * Añade un nuevo registro al fichero
      * @param p el producto que se agrega al fichero
-     * @throws DataAccessException si ha habido algún error escribiendo el nuevo registro
+     * @throws DataWriteException si ha habido algún error escribiendo el nuevo registro
      */
-    void agregarProducto(Producto p) throws DataAccessException;
+    void agregarProducto(Producto p) throws DataWriteException;
 
     /***
      * Elimina un registro del fichero
      * @param id el campo por que el vamos a buscar el registro a eliminar
-     * @throws DataAccessException si ha habido algún error eliminando el registro
+     * @throws DataWriteException si ha habido algún error eliminando el registro
+     * @throws DataNotFoundException si no existe el producto que se quiere borrar
      */
-    void eliminarProducto(int id) throws DataAccessException;
+    void eliminarProducto(int id) throws DataWriteException, DataNotFoundException;
 
     /***
      * Actualiza un registro existente con nuevos datos
      * @param p el producto que vamos a actualizar
-     * @throws DataAccessException si ha habido algún error actualizando el registro
+     * @throws DataWriteException si ha habido algún error actualizando el registro
+     * @throws DataNotFoundException si no existe el producto que se quiere actualizar
      */
-    void actualizarProducto(Producto p) throws DataAccessException;
+    void actualizarProducto(Producto p) throws DataWriteException, DataNotFoundException;
 
     /***
      * Lee los registros del fichero y los devuelve una lista en memoria
      * @return ArrayList con los registros del fichero
-     * @throws DataAccessException si ha habido algún error al acceder al fichero
+     * @throws DataReadException si ha habido algún error al acceder al fichero
+     * @throws QueryException si hay algun fallo con la consulta
      */
-    List<Producto> listar() throws DataAccessException;
+    List<Producto> listar() throws DataReadException, QueryException;
 
     /***
      * Busca un registro concreto en el fichero
      * @param id el campo por el que buscamos el registro
          * @return si encuentra el registro lo devuelve como un objeto Producto en memoria
-     * @throws DataAccessException si ha habido algún error accediendo al fichero
+     * @throws DataReadException si ha habido algún error accediendo al fichero
+     * @throws QueryException si hay algun fallo con la consulta
+     * @throws DataNotFoundException si no existe ningun producto con ese id
      */
-    Producto buscarPorId(int id) throws DataAccessException;
+    Producto buscarPorId(int id) throws DataNotFoundException, QueryException, DataReadException;
 
     /***
      *
      * @return el valor total del inventario
-     * @throws DataAccessException si ha habido algún error al acceder al fichero
+     * @throws DataReadException si ha habido algún error al acceder al fichero
+     * @throws QueryException si hay algun fallo con la consulta
      */
-    double calcularValorInventario() throws DataAccessException;
+    double calcularValorInventario() throws QueryException, DataReadException;
 
     /***
      * Agrupa los productos por categoria
      * @param categoria la categoria por la que vamos a agrupar los productos
      * @return un ArrayList con los productos agrupados por la misma categoría
-     * @throws DataAccessException si ha habido algún error al acceder al fichero
+     * @throws DataReadException si ha habido algún error al acceder al fichero
+     * @throws QueryException si hay algun fallo con la consulta
+     * @throws DataNotFoundException si no existe ningun producto con esa categoria
      */
-    List<Producto> listarPorCategoria(String categoria) throws DataAccessException;
+    List<Producto> listarPorCategoria(String categoria) throws DataNotFoundException, QueryException, DataReadException;
 
 
+    List<Producto> productosUltimosDias(int dias) throws DataNotFoundException, DataReadException, QueryException;
 }

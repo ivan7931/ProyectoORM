@@ -2,9 +2,11 @@ package Clases;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 
 @Entity
-@Table (name = "Proveedor")
+@Table (name = "proveedor")
 public class Proveedor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,6 +19,8 @@ public class Proveedor {
     @Column (name = "empresa", nullable = false, length = 50)
     private String empresa;
 
+    @OneToMany(mappedBy = "proveedor", cascade = CascadeType.ALL)
+    private List<Producto> productos;
 
     public Proveedor(String nombre, String empresa) {
         setNombre(nombre);
@@ -37,7 +41,7 @@ public class Proveedor {
     }
 
     public void setNombre(String nombre) {
-        if(nombre.isEmpty()){
+        if(nombre == null || nombre.isBlank()){
             throw new IllegalArgumentException();
         }
         this.nombre = nombre;

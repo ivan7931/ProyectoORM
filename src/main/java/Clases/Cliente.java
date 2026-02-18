@@ -3,11 +3,11 @@ package Clases;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Cliente")
+@Table(name = "cliente")
 public class Cliente{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column (name = "id", nullable = false,unique = true)
+    @Column (name = "id_cliente", nullable = false,unique = true)
     private int id;
 
     @Column (name = "nombre", nullable = false, length = 50)
@@ -31,7 +31,7 @@ public class Cliente{
     }
 
     public void setNombre(String nombre) {
-        if(nombre.isEmpty()){
+        if(nombre == null || nombre.isBlank()){
             throw new IllegalArgumentException();
         }
         this.nombre = nombre;
@@ -48,7 +48,7 @@ public class Cliente{
         this.apellido = apellido;
     }
 
-    public int getId() {
+    public int getIdCliente() {
         return id;
     }
 
@@ -57,7 +57,7 @@ public class Cliente{
         return "Cliente{" +
                 "nombre='" + nombre + '\'' +
                 ", apellido='" + apellido + '\'' +
-                ",ID= "+getId()+
+                ",ID= "+getIdCliente()+
                 '}';
     }
 }
